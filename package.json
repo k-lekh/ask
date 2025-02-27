@@ -4,8 +4,9 @@
   "description": "AI driven UI",
   "main": "index.ask",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "publish": "npm publish --access=public"
+    "test": "exit 1",
+    "publish": "npm publish --access=public",
+    "deploy": "gh-pages -d public"
   },
   "keywords": [
     "ask",
@@ -19,5 +20,8 @@
     "pattern",
     "framework"
   ],
-  "author": "Konstantin Lekh"
+  "author": "Konstantin Lekh",
+  "dependencies": {
+    "gh-pages": "^6.3.0"
+  }
 }
