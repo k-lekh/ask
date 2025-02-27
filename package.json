@@ -1,5 +1,5 @@
 {
-  "name": "ask",
+  "name": "@klekh/ask",
   "version": "0.1.0",
   "description": "AI driven UI",
   "main": "index.ask",
