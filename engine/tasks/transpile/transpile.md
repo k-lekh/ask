@@ -84,7 +84,7 @@ html, error =
       ${interface}
     `.
 
-return is_valid ? html : ''.  
+return valid ? html : ''.  
 </input_example>
 
 <output_example language="js">
@@ -182,9 +182,9 @@ const [html, error] = await all([
     ${interface}
   `),
 ]);
-log({ html, is_valid });
+log({ html, valid });
 
-return is_valid ? html : '';
+return valid ? html : '';
 </output_example>
 
 # How to transpile
@@ -193,6 +193,9 @@ Output code have to always be valid, secure native javascript.
 Only allowed custom global functions: ask, read.
 Output should start with `function log`.
 Do not output wrap code with "```".
+
+# ASK Language
+Make sure that lists like 'intent, images, theme' are transpiled into 'Promise.all'.
 
 # Task
 Your task is to transpile the source code provided in the Payload below.

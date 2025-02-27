@@ -11,16 +11,21 @@ console.log('task', chalk.bgGrey(task));
 
 import { transpile } from './transpile.js'
 const code = await transpile(task);
-console.log('code', chalk.green(code));
+const codeClean = code
+  .replaceAll('```js', '')
+  .replaceAll('```javascript', '')
+  .replaceAll('```', '');
+console.log('code', chalk.bgGreen(codeClean));
 
 const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
-const async_func = new AsyncFunction('ask', 'read', code);
-console.log('async_func', async_func.toString());
+const async_func = new AsyncFunction('ask', 'read', codeClean);
+console.log('created function code', chalk.bgGray(async_func.toString()));
 
 import { ask } from './ask.js';
 const result = await async_func(ask, read);
 console.log('result', chalk.bgWhite(result));
 
+// redner to file
 import fs from 'fs';
 if (result !== undefined) {
   try {

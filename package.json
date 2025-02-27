@@ -13,7 +13,8 @@
     "cli": "node ./engine/cli.js",
     "task": "node ./engine/task.js",
     "transpile": "node ./engine/transpile.js",
-    "docs": "npm run task ./public/docs.ask ./public/docs.html && open ./public/docs.html"
+    "docs": "npm run task ./public/docs.ask ./public/docs.html && open ./public/docs.html",
+    "web": "npm run task ./public/index.ask ./public/index.html && open ./public/index.html"
   },
   "keywords": [
     "ask",
