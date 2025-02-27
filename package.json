@@ -1,15 +1,12 @@
 {
-  "name": "k-lekh",
+  "name": "ask",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "deploy": "gh-pages -d public --cname k-lekh.com"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "gh-pages": "^6.3.0"
-  }
+  "license": "ISC"
 }
