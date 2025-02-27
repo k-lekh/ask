@@ -1,6 +1,6 @@
 {
   "name": "@klekh/ask",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "AI driven UI",
   "main": "index.ask",
   "scripts": {
