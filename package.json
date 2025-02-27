@@ -3,10 +3,17 @@
   "version": "0.1.2",
   "description": "AI driven UI",
   "main": "index.ask",
+  "type": "module",
   "scripts": {
     "test": "exit 1",
     "publish": "npm publish --access=public",
-    "deploy": "gh-pages -d public"
+    "deploy": "gh-pages -d public",
+    "server": "node ./server/server.js",
+    "server_watch": "nodemon ./server/server.js",
+    "cli": "node ./engine/cli.js",
+    "task": "node ./engine/task.js",
+    "transpile": "node ./engine/transpile.js",
+    "docs": "npm run task ./public/docs.ask ./public/docs.html && open ./public/docs.html"
   },
   "keywords": [
     "ask",
@@ -22,6 +29,10 @@
   ],
   "author": "Konstantin Lekh",
   "dependencies": {
-    "gh-pages": "^6.3.0"
+    "chalk": "^5.4.1",
+    "dotenv": "^16.4.7",
+    "gh-pages": "^6.3.0",
+    "openai": "^4.86.0",
+    "stable-hash": "^0.0.4"
   }
 }

@@ -1,6 +1,5 @@
 # Input example
-```ask
-run { page_content, width, height }
+<input_example language="ask">
   intent, images, theme = 
     `
       # Task
@@ -86,15 +85,12 @@ html, error =
     `.
 
 return is_valid ? html : ''.  
-```
+</input_example>
 
-<output_example>
+<output_example language="js">
 function log(obj) {
   console.log(JSON.stringify(obj, null, 2));
 }
-
-// async function run({ page_content, width, height })
-log({ page_content, width, height });
 
 const [intent, images, theme] = await Promise.all([
   ask(`
@@ -196,6 +192,7 @@ From Input and Output reference, understand the way of transpilling Input code t
 Output code have to always be valid, secure native javascript.
 Only allowed custom global functions: ask, read.
 Output should start with `function log`.
+Do not output wrap code with "```".
 
 # Task
 Your task is to transpile the source code provided in the Payload below.

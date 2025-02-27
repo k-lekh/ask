@@ -1,6 +1,8 @@
+// run `npm run task ./public/docs.ask ./public/docs.html` to generate docs using this task file
+
 example = read(transpile)
 
-template_with_content = content, template = `
+content, template = `
   # Task
   Use payload as real examle to understand the framework 'Ask'.
   Generate documentation for the language.
@@ -18,18 +20,22 @@ valid, html = `
   - Privacy
 
   # Payload
-  ${template_with_content}
+  ## Template
+  ${template}
+
+  ## Content
+  ${content}
 ``
   Render the provided payload as a valid html page.
   Use in-page <style> and <script> tags.
   DO NOT use absolute size, positions
 
   # Payload
-  ${template_with_content}
+  ## Template
+  ${template}
+
+  ## Content
+  ${content}
 `
 
-if (valid) {
-  render(html);
-} else {
-  render(`<ai>Hi! It's Ask.</ai>`);
-}
+return valid ? html : '';
