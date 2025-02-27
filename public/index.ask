@@ -1,4 +1,4 @@
-content = `
+content, template = `
   # Task
   Write a content for the welcome page of a project called 'Ask'.
   It's a new framework for getting job done with AI.
