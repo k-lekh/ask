@@ -1,12 +1,22 @@
 {
   "name": "ask",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.1.0",
+  "description": "AI driven UI",
+  "main": "index.ask",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "keywords": [
+    "ask",
+    "ai",
+    "rfc",
+    "dataflow",
+    "language",
+    "platform",
+    "concept",
+    "protocol",
+    "pattern",
+    "framework"
+  ],
+  "author": "Konstantin Lekh",
 }
