@@ -1,0 +1,92 @@
+content = `
+  # Task
+  Extract meaningful text content from the provided HTML.
+  Output as a well structured Markdown text.
+
+  # Products
+  Find information about available products in the shop: title, photo url, description, price.
+
+  # Images
+  Find information of images: title, alt, url.
+
+  # User
+  Find information about user: name, age, location, orders, etc.
+
+  # Navigation
+  Find information about links for navigation on the provided website: title, description, relative url.
+
+  # HTML
+  ${read(https://saysmth.com/collections/all)}
+`
+
+products, user = `
+  # Task
+  Make a summary of the provided content.
+  Keep only information about available products.
+  Output as a well structured Markdown text.
+
+  # Content
+  ${content}
+``
+  # Task
+  Make a summary of the provided content.
+  Keep only information about available products.
+  Output as a well structured Markdown text.
+
+  # Content
+  ${content}
+`
+
+markdown = `
+  # Task
+  Which product best suits this user?
+  Output the result as a Markdown text.
+
+  # User
+  ${user}
+
+  # Products
+  ${products}
+`
+
+html = `
+  Render the provided Markdown text a valid html page.
+  Follow instructions provided below.
+
+  <markdown>
+  ${markdown}
+  </markdown>
+
+  <date>
+  ${read(date)}
+  </date>
+
+  <theme>
+  Use gradients.
+  No links, no menus.
+  </theme>
+
+  <css>
+  body {
+    background: linear-gradient(135deg, #ff6ec4, #7873f5);
+    background-size: 400% 300%;
+    animation: gradient 20s ease infinite;
+  }
+  </css>
+
+  <code-review-rules>
+  Use in-page <style> and <script> tags.
+  DO NOT use absolute size, positions.
+  </code-review-rules>
+`
+
+return html
+
+return `
+  # Task
+  Refine, smiplify and improve the provided html.
+  Work on content, design and color palette.
+
+  # HTML
+  ${html}
+`;

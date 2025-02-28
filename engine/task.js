@@ -1,37 +1,43 @@
-import path from 'path';
-const args = process.argv.slice(2);
-const [task_file, output_file] = args;
-const task_path = path.resolve(task_file);
-const output_path = path.resolve(output_file);
+'use strict'
 
-import chalk from 'chalk';
-import { read } from './read.js';
-const task = await read(task_path);
-console.log('task', chalk.bgGrey(task));
-
+import chalk from 'chalk'
+import md5 from 'md5'
+import { read } from './read.js'
 import { transpile } from './transpile.js'
-const code = await transpile(task);
-const codeClean = code
-  .replaceAll('```js', '')
-  .replaceAll('```javascript', '')
-  .replaceAll('```', '');
-console.log('code', chalk.bgGreen(codeClean));
+import { ask } from './ask.js'
+import { write } from './write.js'
+import { log } from './log.js'
 
-const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
-const async_func = new AsyncFunction('ask', 'read', codeClean);
-console.log('created function code', chalk.bgGray(async_func.toString()));
-
-import { ask } from './ask.js';
-const result = await async_func(ask, read);
-console.log('result', chalk.bgWhite(result));
-
-// redner to file
-import fs from 'fs';
-if (result !== undefined) {
-  try {
-    fs.writeFileSync(output_path, result);
-    console.log('saved to', chalk.bgGreen(output_file));
-  } catch (err) {
-    console.log('not saved to', chalk.bgRed(output_file));
+function clean(html = '') {
+  let result = html;
+  if (result.startsWith('```html')) {
+    result = result.substring(7);
   }
+  if (result.endsWith('```')) {
+    result = result.substring(0, result.length - 3);
+  }
+  return result;
+}
+
+export async function task(payload) {
+  const started = Date.now()
+  const task_id = md5(payload)
+  const log_id = `${task_id} Task`
+  log(chalk.bgGrey('Transpiling'), log_id)
+  const code = await transpile(task)
+  const code_clean = code
+    .replaceAll('```js', '')
+    .replaceAll('```javascript', '')
+    .replaceAll('```', '')
+  log(chalk.bgGrey('Transpiled'), log_id)
+  
+  const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor
+  const async_func = new AsyncFunction('ask', 'read', 'write', code_clean)
+  log(chalk.bgGreen('Created async function'), log_id)
+  log(async_func.toString(), log_id)
+  
+  const result = clean(await async_func(ask, read, write))
+  log(`Received result ${result}`, log_id);
+  log(`Done in ${Date.now() - started} ms`, log_id)
+  return result
 }

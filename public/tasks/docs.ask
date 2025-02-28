@@ -1,12 +1,19 @@
-content, template = `
+// run `npm run task ./public/docs.ask ./public/docs.html` to generate docs using this task file
+
+example = read(transpile.md)
+
+content, template = Craft documentation from examples `
   # Task
-  Write a content for the welcome page of a project called 'Ask'.
-  It's a new framework for getting job done with AI.
+  Use payload as real examle to understand the framework 'Ask'.
+  Generate documentation for the language.
+  
+  # Payload: transpile.ask
+  ${example}
 ``
-  Generate a mustache-template for rendering a page with documentation.
+  Generate a liquid-template for rendering a page with documentation.
 `
 
-template_with_content = `
+template_with_content = Apply crafted template to collected content `
   # Task
   Put provided content into provided template.
   Keep the template schema.
@@ -18,7 +25,7 @@ template_with_content = `
   ${template}
 `
 
-valid, html = `
+valid, html = Validate `
   # Task
   Validate the provided payload against the following rules:
   - Security
@@ -26,7 +33,8 @@ valid, html = `
 
   # Payload
   ${template_with_content}
-``
+`
+Generate html `
   Render the provided payload as a valid html page.
   Use in-page <style> and <script> tags.
   DO NOT use absolute size, positions

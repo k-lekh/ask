@@ -1,23 +1,21 @@
-import fs from 'fs';
-import path from 'path';
-import chalk from 'chalk';
-
-export async function read(source) {
-  const task_path = path.resolve(`engine/tasks/${source}/${source}.md`);
-  if (fs.existsSync(task_path)) {
-    console.log(`read ${chalk.bgBlue('engine task')} from`, '\'' + source + '\'');
-    return fs.readFileSync(task_path, 'utf8');
-  }
-  
-  const source_path = path.resolve(source);
-  if (fs.existsSync(source_path)) {
-    console.log(
-      `read ${source.endsWith('.ask') ? chalk.bgBlueBright('task') : chalk.bgGray('text')} from`,
-      '\'' + source + '\''
-    );
-    return fs.readFileSync(source_path, 'utf8');
+import fg from 'fast-glob';
+import { promises as fsp } from 'fs';
+export async function read(resource = '') {
+  if (resource.toLowerCase().startsWith('https://')) {
+    console.log('async');
+    return fetch(resource).then(r => r.text());
   }
 
-  console.log(`read ${chalk.bgWhite('nothing')} from`, '\'' + source + '\'');
-  return '';
+  if (resource.toLocaleLowerCase() === 'date') {
+    return Date.now().toString();
+  }
+
+  const files = await fg(resource); 
+  const list = await Promise.all(
+    files.map(async (file_path) => {
+      const file_text = await fsp.readFile(file_path, 'utf8');
+      return file_text;
+    })
+  );
+  return list.join('\n\n');
 }

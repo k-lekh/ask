@@ -1,0 +1,29 @@
+function log(message) {
+  console.info(message);
+}
+
+async function task(payload) {
+  const started = Date.now();
+  const task_id = await ask(`Compute md5 hash for ${payload}`);
+  const log_id = `${task_id} Task`;
+  await log('Transpiling', log_id);
+  
+  const code = await ask(`Transpile task`);
+  const code_clean = code
+    .replaceAll('```js', '')
+    .replaceAll('```javascript', '')
+    .replaceAll('```', '');
+  await log('Transpiled', log_id);
+  
+  const async_func_code = `async function(ask, read, write) { ${code_clean} }`;
+  
+  const async_func = await ask(`Create AsyncFunction from code: ${async_func_code}`);
+  await log('Created async function', log_id);
+  await log(async_func.toString(), log_id);
+  
+  const result = await ask(`Execute async_func with ask, read, write`);
+  await log(`Received result ${result}`, log_id);
+  await log(`Done in ${Date.now() - started} ms`, log_id);
+  
+  return result;
+}

@@ -1,7 +1,13 @@
+# Role
+You are machine converting input text into output text.
+Input text in language 'ask', which describes asynchronous data flows between ai agents.
+Output is valide javascript code.
+Your output have to be deterministic, and aligned with rules described in this task.
+
 # Input example
 <input_example language="ask">
   intent, images, theme = 
-    `
+    Understand user intent from page content `
       # Task
       From the provided page understand the context.
       Then find the most probable user intent for now.
@@ -47,7 +53,7 @@
   `
   
 html, error =
-    `
+    Generate html `
       # Task
       Generate valid html <div> and its childs.
       Use the provided theme and image urls.
@@ -70,8 +76,8 @@ html, error =
       Use native html, css. 
       No js.
       Put styles into the <style> tag, inside div.
-    `,
     `
+    Validate `
       # Task
       Validate the following interface description against the following criteria:
       - valid syntax
@@ -80,19 +86,23 @@ html, error =
       - privacy
       - laws
 
+      Reply only errors.
+      Reply nothing if no errors.
+
       # Interface
       ${interface}
-    `.
+    `
 
-return valid ? html : ''.  
+return error ?? html;
 </input_example>
 
 <output_example language="js">
-function log(obj) {
-  console.log(JSON.stringify(obj, null, 2));
+function log(message) {
+  console.info(message);
 }
 
 const [intent, images, theme] = await Promise.all([
+  log('Understand user intent from page content');
   ask(`
     # Task
     From the provided page understand the context.
@@ -118,7 +128,6 @@ const [intent, images, theme] = await Promise.all([
     ${page_content}
   `),
 ]);
-log({ intent, images, theme });
 
 const user_task = await ask(`
   # Task
@@ -131,7 +140,7 @@ const user_task = await ask(`
 `);
 log({ user_task }); 
 
-const user_profile = read('user_profile');
+const user_profile = await xcçread('user_profile');
 const interface = await ask(`
   # Task
   Design the interface which best way allows user to solve their task provided below.
@@ -168,7 +177,7 @@ const [html, error] = await all([
     Use native html, css. 
     No js.
     Put styles into the <style> tag, inside div.
-  `),
+  `, `Generate html`),
   ask(`
     # Task
     Validate the following interface description against the following criteria:
@@ -178,13 +187,16 @@ const [html, error] = await all([
     - privacy
     - laws
 
+    Reply only errors.
+    Reply nothing if no errors.
+
     # Interface
     ${interface}
-  `),
+  `, `Validate`),
 ]);
-log({ html, valid });
+log({ html, error });
 
-return valid ? html : '';
+return error ?? html;
 </output_example>
 
 # How to transpile
@@ -192,9 +204,9 @@ From Input and Output reference, understand the way of transpilling Input code t
 Output code have to always be valid, secure native javascript.
 Only allowed custom global functions: ask, read.
 Output should start with `function log`.
-Do not output wrap code with "```".
+Do NOT output wrap code with "```".
 
-# ASK Language
+# Ask`` Language
 Make sure that lists like 'intent, images, theme' are transpiled into 'Promise.all'.
 
 # Task

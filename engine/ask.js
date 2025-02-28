@@ -1,18 +1,60 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import dotenv from 'dotenv'
+dotenv.config()
 
-import OpenAI from "openai";
+import OpenAI from "openai"
 const rules = `
   Be concise. Do not repeat question. Do not repeat input data.
   If task comes with state, then use this state to satisfy the request.
   If state is provided, then you need to evaluate a next state and use it for output.
   Don't ask for more details, it's a one-shot conversation.
   If you asked a yes/no question, then reply only YES or NO, and nothing else.
-`.trim();
-const openai = new OpenAI();
+`.trim()
+const openai = new OpenAI()
 
-export async function ask(input_task, ...subs) {
+import path from 'path'
+import fs from 'fs'
+import md5 from 'md5'
+import chalk from 'chalk'
+import { log } from './log.js'
+
+['./cache'].forEach(dir => {
+  if (!fs.existsSync(path.resolve(dir))) {
+    fs.mkdirSync(path.resolve(dir));
+  }  
+})
+
+export async function ask(input_task = '', intent = '') {
+  const started = Date.now()
   const task = Array.isArray(input_task) && subs.length === 0 ? input_task[0] : String(input_task)
+  if (!task) {
+    return 'Error: no input task'
+  }
+
+  let task_intent = intent === null 
+    ? input_task.substring(0, 40) + "..." 
+    : intent 
+  // || await ask(`
+  //   What is the intent of the following task?
+  //   Shortly, in 1-3 words.
+  //   Present continuous.
+
+  //   # Task
+  //   ${task}
+  // `, null)
+  task_intent =  task_intent.trim()
+  const cache_key = md5(task);
+  const log_id = `${cache_key} Ask`;
+  const cache_path = path.resolve(`./cache/${cache_key}.task.cache`);
+  log(chalk.bgCyan(task_intent), log_id)
+  
+  if (fs.existsSync(cache_path)) {
+    const cache_text = fs.readFileSync(cache_path, 'utf8');
+    if (cache_text) {
+      log(chalk.cyan(`Answered from cache ${cache_key}`), log_id);
+      return cache_text;
+    }
+  }
+
   const completion = await openai.chat.completions.create({
       model: "o1-mini",
       messages: [{
@@ -21,11 +63,15 @@ export async function ask(input_task, ...subs) {
           # Rules
           ${rules}
           
-          # Task
+
           ${task}
         `.trim(),
       }]
   });
-  
-  return completion?.choices?.map(choice => choice?.message?.content).filter(Boolean).join('\n\n');
+  const text_result = completion?.choices?.map(choice => choice?.message?.content).filter(Boolean).join('\n\n');
+  fs.writeFileSync(cache_path, text_result)
+
+  log(`Done in ${Date.now() - started} ms, used ${JSON.stringify(completion?.usage ?? {}, null, 2)}`, log_id)
+
+  return text_result
 }

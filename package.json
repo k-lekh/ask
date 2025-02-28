@@ -5,16 +5,15 @@
   "main": "index.ask",
   "type": "module",
   "scripts": {
-    "test": "exit 1",
     "release": "npm version patch && npm publish --access=public",
     "deploy": "gh-pages -d public",
+    "cli": "node ./cli/cli.js",
+    "task": "node ./cli/task.js",
     "server": "node ./server/server.js",
     "server_watch": "nodemon ./server/server.js",
-    "cli": "node ./engine/cli.js",
-    "task": "node ./engine/task.js",
-    "transpile": "node ./engine/transpile.js",
-    "docs": "npm run task ./public/docs.ask ./public/docs.html && open ./public/docs.html",
-    "web": "npm run task ./public/index.ask ./public/index.html && open ./public/index.html"
+    "clean": "rm -rf ./cache && rm -rf ./logs",
+    "test": "exit 1",
+    "transpile": "exit 1"
   },
   "keywords": [
     "ask",
@@ -26,14 +25,18 @@
     "concept",
     "protocol",
     "pattern",
-    "framework"
+    "framework",
+    "server"
   ],
   "author": "Konstantin Lekh",
   "dependencies": {
     "chalk": "^5.4.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "fast-glob": "^3.3.3",
     "gh-pages": "^6.3.0",
-    "openai": "^4.86.0",
-    "stable-hash": "^0.0.4"
+    "md5": "^2.3.0",
+    "openai": "^4.86.0"
   }
 }

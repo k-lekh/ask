@@ -1,0 +1,64 @@
+template = `
+  Generate a simple web page about new framework.
+  Output in mustache template, please.
+`
+
+template_with_content = `
+  # Task
+  Put provided content into provided template.
+  Keep the template schema.
+
+  # Template
+  ${template}
+
+  # Content
+  ## Readme
+  ${read(Readme.md)}
+
+  ## Transpilation
+  ${read(transpile.md)}
+`
+
+valid, html = `
+  # Task
+  Validate the provided payload against the following rules:
+  - Security
+  - Privacy
+
+  # Payload
+  ${template_with_content}
+``
+  # Task
+  Render the provided mustache template to the valid html, which is ready to production deployment.
+  
+  # Rules
+  Use in-page <style> tags.
+  Use modern css features.
+  DO NOT use absolute size, positions.
+  Page have to be fully flexible.
+  Responsiveness implemented in html.
+  Do not use @media query.
+
+  # Payload
+  ${template_with_content}
+
+  # Current date
+  ${read(date)}
+
+  # Theme
+  Soft colors.
+  Vibrant background animation with glow effect.
+  Minimalistic.
+  Active elements have blurred background;
+
+  # Favicon
+  Favicon path is: 'images/favicon.png'.
+
+  # Disclaimer
+  Add disclaimer that this UI is fully made by AI followed by instructions on ask-language.
+
+  # Title
+  Just ask``
+`
+
+return valid ? html : '';
