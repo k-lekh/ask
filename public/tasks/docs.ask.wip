@@ -1,6 +1,6 @@
 // run `npm run task ./public/docs.ask ./public/docs.html` to generate docs using this task file
 
-example = read(transpile.md)
+example = read('transpile.md')
 
 content, template = Craft documentation from examples `
   # Task

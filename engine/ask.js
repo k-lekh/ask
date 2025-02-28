@@ -30,21 +30,10 @@ export async function ask(input_task = '', intent = '') {
     return 'Error: no input task'
   }
 
-  let task_intent = intent === null 
-    ? input_task.substring(0, 40) + "..." 
-    : intent 
-  // || await ask(`
-  //   What is the intent of the following task?
-  //   Shortly, in 1-3 words.
-  //   Present continuous.
-
-  //   # Task
-  //   ${task}
-  // `, null)
-  task_intent =  task_intent.trim()
+  let task_intent = input_task.trim().substring(0, 100) + "...";
   const cache_key = md5(task);
-  const log_id = `${cache_key} Ask`;
-  const cache_path = path.resolve(`./cache/${cache_key}.task.cache`);
+  const log_id = `${cache_key}  Ask`;
+  const cache_path = path.resolve(`./cache/${cache_key}`);
   log(chalk.bgCyan(task_intent), log_id)
   
   if (fs.existsSync(cache_path)) {
@@ -68,8 +57,9 @@ export async function ask(input_task = '', intent = '') {
         `.trim(),
       }]
   });
-  const text_result = completion?.choices?.map(choice => choice?.message?.content).filter(Boolean).join('\n\n');
+  const text_result = completion?.choices?.map(choice => choice?.message?.content).filter(Boolean).join('\n\n')
   fs.writeFileSync(cache_path, text_result)
+  log(chalk.cyan('Cached'), log_id);
 
   log(`Done in ${Date.now() - started} ms, used ${JSON.stringify(completion?.usage ?? {}, null, 2)}`, log_id)
 

@@ -1,0 +1,15 @@
+memory = read('snapshots/widgets.mem')
+result = task('docs.ask')
+equal = `
+  # Task
+  Compare provided payload with the provided snapshot.
+  Answer yes or no - are they equal?
+
+  # Snapshot
+  ${memory}
+
+  # Payload
+  ${result}
+`
+
+return equal?.trim().toLowerCase() === 'yes'

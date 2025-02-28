@@ -1,0 +1,64 @@
+readme_text = read('Readme.md')
+engine_text = read('engine/**')
+
+intro_text, architecture_text, template = `
+  # Task
+  From a provided payload you should generate a human readable description of a programming language 'Ask'.
+  Payload contains source codes in 'js' files, manuals in 'md' files, and Ask-language files have '.ask' extension.
+  It should be short overview for a small introduction.
+
+  <readme>
+  ${readme_text}
+  </readme>
+
+  # Payload:
+  ${engine_text}
+``
+  # Task
+  From a provided payload you should generate an architectural design overview.
+  Payload contains source codes in 'js' files, manuals in 'md' files, and Ask-language files have '.ask' extension.
+  Present all technical details in a well structured and concise manner.
+  Be consice. Reply summary.
+
+  <readme>
+  ${readme_text}
+  </readme>
+
+  # Payload:
+  ${engine_text}
+``
+  # Task
+  Provide a simple and robust Markdown template for using for documentation about framework.
+  Use best practices such as link to npm, github, author, etc.
+`
+
+valid, html = `
+  # Task
+  Validate the provided payload against the following rules:
+  - Security
+  - Privacy
+
+  # Output
+  If payload is valid, reply "valid".
+  If payload is NOT valid, reply with error message.
+
+  # Payload
+  ${JSON.stringify({ intro_text, architecture_text, template }, null, 2)}
+``
+  # Task
+  Render the provided data to html.
+  Use provided Template to render provided Content.
+  Use in-page <style> and <script> tags.
+  DO NOT use absolute size, positions
+
+  # Payload
+  ## Template
+  ${template}
+  ## Content
+  ### Intro text
+  ${intro_text}
+  ### Architecture
+  ${architecture_text}
+`
+
+return valid.trim() === "valid" ? html : valid

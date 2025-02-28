@@ -1,8 +1,8 @@
 write(
-  task(read(./public/index.ask)
-  ./public/index.html
+  task(read('./public/index.ask')
+  './public/index.html'
 )
 write(
-  task(read(./public/docs.ask)
-  ./public/docs.html
+  task(read('./public/docs.ask')
+  './public/docs.html'
 )

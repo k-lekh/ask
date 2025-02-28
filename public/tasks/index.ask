@@ -13,10 +13,10 @@ template_with_content = `
 
   # Content
   ## Readme
-  ${read(Readme.md)}
+  ${read('Readme.md')}
 
   ## Transpilation
-  ${read(transpile.md)}
+  ${read('transpile.md')}
 `
 
 valid, html = `
@@ -43,7 +43,7 @@ valid, html = `
   ${template_with_content}
 
   # Current date
-  ${read(date)}
+  ${read('date')}
 
   # Theme
   Soft colors.

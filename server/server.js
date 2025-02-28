@@ -15,7 +15,7 @@ app.post('/ask', async ({ body }, response) => {
   response.send(await ask(body))
 });
 
-import { task } from '../engine/cli/task.js'
+import { task } from '../engine/task.js'
 app.post('/task', async ({ body }, response) => {
   response.send(await task(body))
 });

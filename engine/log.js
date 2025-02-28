@@ -9,11 +9,14 @@ import { append } from './append.js'
   }  
 })
 
-export async function log(payload, log_id) {
+export async function log(payload = '', log_id = '') {
+  const now = new Date();
+  let time = chalk.gray(`${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`);
   if (log_id) {
     const log_path = path.resolve(`./logs/${log_id}.log`)
-    const preview = payload.trim().slice(0, 55) + (payload.length > 55 ? '...' : '');
-    append(log_path, `${Date.now()}\t\t${preview}`);
+    append(log_path, '\n\n' + payload);
+    console.log(time + ' ' + log_id, '\n', payload);
+  } else {
+    console.log(time + ' ' + payload);
   }
-  console.log(log_id ? log_id + ' ' + payload : payload);
 }

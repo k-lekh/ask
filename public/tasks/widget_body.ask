@@ -1,0 +1,97 @@
+content = `
+  # Task
+  Extract meaningful text content from the provided HTML.
+  Output as a well structured Markdown text.
+
+  # Products
+  Find information about available products in the shop: title, photo url, description, price.
+
+  # Images
+  Find information of images: title, alt, url.
+
+  # User
+  Find information about user: name, age, location, orders, etc.
+
+  # Navigation
+  Find information about links for navigation on the provided website: title, description, relative url.
+
+  # Theme
+  Page colors, fonts, gradients, animations.
+
+  # HTML
+  ${read('https://saysmth.com/collections/all')}
+`
+
+const intent = `
+  # Task
+  From the provided html page content, find out the user intent, why are they came to this page, and what are they going to do?
+
+  # Content
+  ${content}
+`
+
+navigation, markdown = `
+  # Task 
+  From the provided below Content, get two Navigation items, which may help user with the intent described below.
+
+  # Intent
+  ${intent}
+
+  # Content
+  ${content}
+``
+  # Task 
+  Use Theme in the provided below Content to create a compact 
+
+  # Intent
+  ${intent}
+
+  # Content
+  ${content}
+
+  # Output
+  Output the result as a Markdown text.
+`
+
+markdown_with_content = `
+  # Task
+  Insert provided Content into the provided Template.
+
+  # Output
+  Reply with valid Markdown.
+
+  # Content
+  ${navigation}
+
+  # Template
+  ${markdown}
+`
+
+html = `
+  <task>
+  Render the provided payload to render provided markdown to html <body> element using provided content and theme.
+  Output should start with <body> and end with </body>.
+  <task>
+
+  <markdown>
+  ${markdown_with_content}
+  </markdown>
+
+  <date>
+  ${read('date')}
+  </date>
+
+  <theme>
+  linear-gradient(135deg, #ff6ec4, #7873f5);
+  animation: gradient 20s ease infinite;
+  
+  ${theme}
+  </theme>
+
+  <code-review-rules>
+  Use in-page <style> and <script> tags.
+  DO NOT use absolute size, positions.
+  </code-review-rules>
+`
+
+return html
