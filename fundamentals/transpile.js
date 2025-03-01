@@ -1,5 +1,9 @@
+import chalk from 'chalk'
+import { hash } from './hash.js'
 import { read } from './read.js'
+import { write } from './write.js'
 import { ask } from './ask.js'
+import { clean} from './clean.js'
 
 /**
  * Transpiles argument written in Ask-language to a javascript code.
@@ -7,6 +11,13 @@ import { ask } from './ask.js'
  * Then instant async call of this function retreives a result of executing instructions described in the original payload in Ask-language.
  */
 export const transpile = async (ask_text) => {
+  const id = hash(ask_text)
+  const cache_path = `cache/transpile/${id}.js`
+  const cache_js = read(cache_path)
+  if (cache_js) {
+    return cache_js
+  }
+
   const rules = await ask(`
     # Role
     You are code analyser.
@@ -45,5 +56,9 @@ export const transpile = async (ask_text) => {
     ${ask_text}
   `);
 
-  return js;
+  const clean_js = clean(js)
+  write(clean_js, cache_path)
+  log(chalk.bgGrey(`Transpiled`), id);
+  log(chalk.grey(clean_js));
+  return clean_js
 }

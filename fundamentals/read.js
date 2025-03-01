@@ -16,8 +16,12 @@ export async function read(resource = '') {
   const list = await Promise.all(
     files.map(async (file_path) => {
       const file_text = await fsp.readFile(file_path, 'utf8');
-      return file_text;
+      return `
+        <file path="${file_path}">
+        ${file_text}
+        </file>
+      `;
     })
   );
-  return list.join('\n\n--\n\n');
+  return list.join('\n');
 }

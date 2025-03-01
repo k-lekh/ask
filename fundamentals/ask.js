@@ -20,7 +20,7 @@ import md5 from 'md5'
 import chalk from 'chalk'
 import { log } from './log.js'
 
-['./cache'].forEach(dir => {
+['./cache', './cache/ask'].forEach(dir => {
   if (!fs.existsSync(path.resolve(dir))) {
     fs.mkdirSync(path.resolve(dir))
   }  
@@ -47,8 +47,8 @@ async function default_ask(arg1, input_payload, {
 
   let task_intent = input_task.trim().substring(0, 100) + "...";
   const cache_key = md5(input_task);
-  const log_id = `${cache_key}  Ask`;
-  const cache_path = path.resolve(`./cache/${cache_key}`);
+  const log_id = `${cache_key} Ask`;
+  const cache_path = path.resolve(`./cache/ask/${cache_key}.${model}`);
   log(chalk.bgCyan(task_intent), log_id)
   
   if (fs.existsSync(cache_path)) {

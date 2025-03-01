@@ -89,12 +89,39 @@ In generated code, I prefer more strict rules, such as adding ';' to the end of 
 ## Parallel functions
 <input lang="ask">
   original_widget, original_description = 
-    find(html_text, '[data-exchange-rate]')
-    find(html_text, '[data-attrid="wa:/description"]')
+    find('[data-exchange-rate]', html_text)
+    find('[data-attrid="wa:/description"]', html_text)
 </input>
 <output lang="js">
-  
+  const [original_widget, original_description] = await Promise.all([
+    find('[data-exchange-rate]', html_text),
+    find('[data-attrid="wa:/description"]', html_text),
+  ]);
 </output>
+
+## Combine global function with in-place ask 
+<input lang="ask">
+  docs, examples = `
+    # Task
+    Summarise the text provided in payload.
+    Reply in Markdown.
+
+    # Payload
+    ${read(playground/*.md)}
+  `, read(playground/*.ask)
+</input>
+<output lang="js">
+  const [docs, examples] = await Promise.all([
+    ask(`
+      # Task
+      Summarise the text provided in payload.
+      Reply in Markdown.
+
+      # Payload
+      ${read(playground/*.md)}
+    `), read(playground/*.ask)
+  ])
+</input>
 
 ## Global function call
 <input lang="ask">
@@ -186,3 +213,15 @@ In generated code, I prefer more strict rules, such as adding ';' to the end of 
     Generate html
   `, { model: 'o3-mini' })
 </output>
+
+# Any order
+In Ask the order of instructions does not matter, because transpiler will handle it.
+First, it will reorder all ask-expressions the way, that all variables are initialised before usage.
+When a const is used, before appending the result to the transpiled output code, transpiler looks for a const initialisation in already generated code.
+If variable exists, it uses its value.
+If not, then transpiler finds its initialisation in the whole ask-code and copy/pastes its initialisation before its first usage.
+Then, below, re-initialisation will happen, which does not cause any costs, because reply will be received from cache.
+For example:
+```ask
+
+```

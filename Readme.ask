@@ -1,0 +1,19 @@
+/**
+This file contains instructions in Ask language for building Readme.md file about this project.
+Such files in Ask called routines.
+Routine is a graph of fundamental calls.
+Fundamentals are: ask, read, write.
+Routines may be chained > like > this.
+
+To know more abot Ask, build the docs:
+`npm run routine Readme.ask >> Readme.md`
+*/
+
+docs, examples = `
+  # Task
+  Summarise the text provided in payload.
+  Reply in Markdown.
+
+  # Payload
+  ${read(playground/*.md)}
+`, read(playground/*.ask)
