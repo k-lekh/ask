@@ -13,3 +13,5 @@ async function default_append(patch, destination) {
     destination
   )
 }
+
+export const append = _append

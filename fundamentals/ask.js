@@ -84,6 +84,4 @@ ${input_task}
   return text_result
 }
 
-export async function ask(...args) {
-  return await _ask(...args);
-}
+export const ask = _ask

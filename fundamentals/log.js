@@ -10,7 +10,11 @@ import { append } from './append.js'
   }  
 })
 
-export async function log(payload = '', log_id = '') {
+let _log = default_log
+export async function default_log(payload = '', log_id = '') {
+  if (typeof payload === 'function') {
+    _log = payload
+  }
   const now = new Date();
   let time = chalk.gray(`${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`);
   log_id = log_id || md5(payload)
@@ -22,3 +26,5 @@ export async function log(payload = '', log_id = '') {
     console.log(time + ' ' + payload);
   }
 }
+
+export const log = _log
