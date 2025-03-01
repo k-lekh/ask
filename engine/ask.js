@@ -27,7 +27,9 @@ import { log } from './log.js'
 })
 
 let _ask = default_ask
-async function default_ask(arg1, arg2) {
+async function default_ask(arg1, input_payload, {
+  model = default_model,
+} = {}) {
   if (arg1 === '') {
     return ''
   }
@@ -38,7 +40,6 @@ async function default_ask(arg1, arg2) {
   }
 
   let input_task = arg1 ?? ''
-  const input_payload = arg2
   if (input_payload) {
     input_task = input_task + '\n\n# Payload:\n' + input_payload
   }
@@ -63,11 +64,14 @@ async function default_ask(arg1, arg2) {
       messages: [{
         role: "user", 
         content: `
-          # Rules
-          ${rules}
-          
+# Rules
+<rules>
+${rules}
+</rules>
 
-          ${input_task}
+
+
+${input_task}
         `.trim(),
       }]
   });
