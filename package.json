@@ -7,7 +7,7 @@
   "scripts": {
     "release": "npm version patch && npm publish --access=public",
     "deploy": "gh-pages -d public",
-    "cli": "node ./cli/cli.js",
+    "talk": "node ./cli/talk.js",
     "task": "node ./cli/task.js",
     "server": "node ./server/server.js",
     "server_watch": "nodemon ./server/server.js",
@@ -31,6 +31,7 @@
   "author": "Konstantin Lekh",
   "dependencies": {
     "chalk": "^5.4.1",
+    "cheerio": "^1.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",

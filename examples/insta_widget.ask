@@ -1,0 +1,61 @@
+html_text = read('https://gravatar.com/profile/about')
+user, theme = `
+  # Task
+  From the provided HTML page extract all possible information related to user.
+
+  # Payload
+  ${html_text}
+``
+  # Task
+  From the HTML provided in the payload, compile one single main css theme of the website.
+  Reply in CSS.
+
+  # Payload
+  ${html_text}
+`
+
+content, markdown = `
+  # Task
+  Present the provided in the Payload information about user as a compact banner.
+  
+  # Payload
+  ${engine_text}
+``
+  # Task
+  Provide a simple and robust Markdown template for small banner with title, subtile and button.
+  Use best practices.
+``
+  # Task
+  Provide a simple and robust Mustache template Markdown template for using for documentation about framework.
+  Use best practices such as link to npm, github, author, etc.
+`
+
+valid, html = `
+  # Task
+  Validate the provided payload against the following rules:
+  - Security
+  - Privacy
+
+  # Output
+  If payload is valid, reply "yes".
+  If payload is NOT valid, reply with error message.
+
+  # Payload
+  ${content}
+``
+  Render the provided Content using provided Template.
+  Output in HTML.
+  Use in-page <style> and <script> tags.
+  DO NOT use absolute size, positions
+
+  # Payload
+  <content>
+  ${content}
+  </content>
+
+  <template>
+  ${markdown}
+  </template>
+`
+
+return valid.trim().toLowerCase() === "yes" ? html : `<div style="color:red">${valid}</div>`

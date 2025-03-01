@@ -12,11 +12,10 @@ export const transpile = async (ask_text) => {
     You are code analyser.
     Use provided Language definition to extract transpilation rules for the provided language.
     Rules should be clear enough to follow them exactly while transpiling.
-    Reply in XML or JSON format.
-    DO NOT use Markdown.
+    Reply in the most common used for this purpose format.
 
     # Language definition
-    ${await read('engine/ask-language.md')}
+    ${await read('engine/Ask-language.md')}
   `)
 
   const js = await ask(`
@@ -34,6 +33,7 @@ export const transpile = async (ask_text) => {
     Output code have to always be valid, secure native javascript.
     Only allowed custom global functions: ask, read, write, log.
     Do NOT output wrap code with "\`\`\`".
+    Format spaces and tabs with Prettier.
 
     # Ask Language
     Make sure that lists like 'intent, images, theme' are transpiled into 'Promise.all'.

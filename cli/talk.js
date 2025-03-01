@@ -12,6 +12,9 @@ const io = readline.createInterface({
 const run_id = Date.now()
 
 io.on('line', async (input) => {
+  /** @todo
+   * infinite talk where user input executes as ask or routine, which receives previous answer as a payload
+   */
   log(chalk.bgGray(await ask(input)), run_id)
 });
 

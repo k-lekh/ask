@@ -1,0 +1,27 @@
+/**
+  This is the point, where the app starts evolving.
+  Once 'actual best practices changes', the whole app rebuilds according to these changes.
+  As if the whole team of designers, managers, developers, QAa and other staff worked hard for the new release.
+  You do this for 10 cents and 30 secods.
+  This is AI driven UI.
+  This is possible with Ask.
+*/
+best_practices = o1-mini `
+  Reply with a list of actual best rpactices in writing a task in IT business.
+`
+
+text = read(docs/drafts/How to use it.md) // read this exact file
+task = `
+  # Task
+  Your role is to understand long unstructured text and extract the detailed task definition from it.
+  Also add intent, motivation, expected result.
+  Follow best practices, provided below.
+
+  # Best practices
+  ${}
+
+
+  ${text}
+`
+write(docs/drafts/How to use it.md.reply)
+return task

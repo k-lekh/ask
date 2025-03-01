@@ -7,12 +7,14 @@ import { log } from '../engine/log.js'
 
 const log_id = Date.now()
 const args = process.argv.slice(2)
-const [task_file, output_file] = args
-const task_path = path.resolve(task_file)
+const [script_file, output_file] = args
+const script_path = path.resolve(script_file)
 let output_path = output_file.startsWith('.') ? output_file : path.resolve(output_file)
 
-const task_text = await read(task_path)
-const output_text = await task(task_text);
+const script_text = await read(script_path)
+// TODO read payload from pipe | operator 
+let payload = ''
+const output_text = await task(script_text, payload);
 
 if (output_text !== undefined) {
   if (output_path.startsWith('.')) {

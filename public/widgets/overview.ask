@@ -1,0 +1,7 @@
+content_overview = `
+  # Task
+  Make a summary of the provided text.
+
+  # Text
+  ${read('engine/Concept')}
+`

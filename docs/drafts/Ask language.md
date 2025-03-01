@@ -7,7 +7,7 @@ In human code, I prefer clean and minimalistic style.
 In generated code, I prefer more strict rules, such as adding ';' to the end of the executable line;
 
 # Examples
-## Example: Single Ask
+##  Single Ask
 <input lang="ask">
     intent = "Regular text constant"
     user_task = `
@@ -33,7 +33,7 @@ In generated code, I prefer more strict rules, such as adding ';' to the end of 
     `);
 </output>
 
-## Example: Parallel Asks
+## Parallel Asks
 <input lang="ask">
   intent, images, theme = 
     Understand user intent from page content `
@@ -86,7 +86,17 @@ In generated code, I prefer more strict rules, such as adding ';' to the end of 
   ]);
 </output>
 
-## Example: Global function call
+## Parallel functions
+<input lang="ask">
+  original_widget, original_description = 
+    find(html_text, '[data-exchange-rate]')
+    find(html_text, '[data-attrid="wa:/description"]')
+</input>
+<output lang="js">
+  
+</output>
+
+## Global function call
 <input lang="ask">
   contacts = read('https://domain.com/contacts')
   task_text = read('tasks/transpile.md')
@@ -97,7 +107,7 @@ In generated code, I prefer more strict rules, such as adding ';' to the end of 
 </output>
 </input_example>
 
-## Example: Native JavaScript keeps unchanged
+## Native JavaScript keeps unchanged
 <input lang="ask">
   if (error) {
     alert(error)
@@ -114,8 +124,8 @@ In generated code, I prefer more strict rules, such as adding ';' to the end of 
 </output>
 </input_example>
 
-## Examples return value
-### Keep existing return code
+## Return
+### Keep existing return source code
 <input lang="ask">
   data = `count from 0 to 10`
   
@@ -127,7 +137,7 @@ In generated code, I prefer more strict rules, such as adding ';' to the end of 
   return data ?? '';
 </input>
 
-### Return last evaluated value
+### Return last computed value
 <input lang="ask">
   data = `count from 0 to 10`
 </input>
@@ -137,14 +147,42 @@ In generated code, I prefer more strict rules, such as adding ';' to the end of 
   return data;
 </input>
 
-### Return last anonumous evaluated value
+### Return last anonymous computed value
 <input lang="ask">
   `
-    count from 0 to 10
+    count from 0 to ${value}
   `
 </input>
 <input output="js">
-  const _tmp_ = await ask(`count from 0 to 10`);
-
-  return _tmp_;
+  return await ask(`
+    count from 0 to ${value}
+  `);
 </input>
+
+## Async by default
+<input lang="ask">
+  console.log('Do you already love it or have it?')
+</input>
+<output lang="js">
+  await console.log('Do you already love it or have it?');
+</output>
+
+## Call imported tasks
+<input lang="ask">
+  html = 'engine/html.ask' template_with_content
+</input>
+<output lang="js">
+  html = 'engine/html.ask' template_with_content
+</output>
+
+## Specify model
+<input lang="ask">
+  html = o3-mini `
+    Generate html
+  `
+</input>
+<output lang="js">
+  const html = ask(`
+    Generate html
+  `, { model: 'o3-mini' })
+</output>

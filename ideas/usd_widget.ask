@@ -1,5 +1,9 @@
-html_text = read('https://www.instagram.com/k__lekh/')
-user, theme, important_fields = `
+html_text = read('https://www.google.com/search?q=1+eur+in+usd')
+original_widget, original_description = 
+  find(html_text, '[data-exchange-rate]')
+  find(html_text, '[data-attrid="wa:/description"]')
+
+user, theme = `
   # Task
   From the provided HTML page extract all possible information related to user.
 
@@ -12,21 +16,11 @@ user, theme, important_fields = `
 
   # Payload
   ${html_text}
-``
-  # Task
-  From the provided HTML extract the most important text values.
-  Reply top 10, from most important to less important.
-
-  # Payload
-  ${html_text}
 `
 
-content, template = `
+content, markdown = `
   # Task
   Present the provided in the Payload information about user as a compact banner.
-
-  # Prefer important fields
-  ${important_fields}
   
   # Payload
   ${engine_text}
@@ -64,8 +58,8 @@ valid, html = `
   </content>
 
   <template>
-  ${template}
+  ${markdown}
   </template>
 `
 
-return valid.trim().toLowerCase() === "yes" ? html : valid
+return valid.trim().toLowerCase() === "yes" ? html : `<div style="color:red">${valid}</div>`

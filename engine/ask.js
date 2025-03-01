@@ -1,6 +1,8 @@
 import dotenv from 'dotenv'
 dotenv.config()
 
+const default_model = 'o3-mini-2025-01-31'
+
 import OpenAI from "openai"
 const rules = `
   Be concise. Do not repeat question. Do not repeat input data.
@@ -8,6 +10,7 @@ const rules = `
   If state is provided, then you need to evaluate a next state and use it for output.
   Don't ask for more details, it's a one-shot conversation.
   If you asked a yes/no question, then reply only YES or NO, and nothing else.
+  If your answer is NO, no, No, nO — then reply with empty string, and never reply with empty string in other cases.
 `.trim()
 const openai = new OpenAI()
 
@@ -19,19 +22,30 @@ import { log } from './log.js'
 
 ['./cache'].forEach(dir => {
   if (!fs.existsSync(path.resolve(dir))) {
-    fs.mkdirSync(path.resolve(dir));
+    fs.mkdirSync(path.resolve(dir))
   }  
 })
 
-export async function ask(input_task = '', intent = '') {
-  const started = Date.now()
-  const task = Array.isArray(input_task) && subs.length === 0 ? input_task[0] : String(input_task)
-  if (!task) {
-    return 'Error: no input task'
+let _ask = default_ask
+async function default_ask(arg1, arg2) {
+  if (arg1 === '') {
+    return ''
   }
 
+  if (typeof arg1 === 'function') {
+    _ask = arg1
+    return;
+  }
+
+  let input_task = arg1 ?? ''
+  const input_payload = arg2
+  if (input_payload) {
+    input_task = input_task + '\n\n# Payload:\n' + input_payload
+  }
+  const started = Date.now()
+
   let task_intent = input_task.trim().substring(0, 100) + "...";
-  const cache_key = md5(task);
+  const cache_key = md5(input_task);
   const log_id = `${cache_key}  Ask`;
   const cache_path = path.resolve(`./cache/${cache_key}`);
   log(chalk.bgCyan(task_intent), log_id)
@@ -45,7 +59,7 @@ export async function ask(input_task = '', intent = '') {
   }
 
   const completion = await openai.chat.completions.create({
-      model: "o1-mini",
+      model,
       messages: [{
         role: "user", 
         content: `
@@ -53,7 +67,7 @@ export async function ask(input_task = '', intent = '') {
           ${rules}
           
 
-          ${task}
+          ${input_task}
         `.trim(),
       }]
   });
@@ -64,4 +78,8 @@ export async function ask(input_task = '', intent = '') {
   log(`Done in ${Date.now() - started} ms, used ${JSON.stringify(completion?.usage ?? {}, null, 2)}`, log_id)
 
   return text_result
+}
+
+export async function ask(...args) {
+  return await _ask(...args);
 }

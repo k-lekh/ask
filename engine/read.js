@@ -1,9 +1,11 @@
-import fg from 'fast-glob';
-import { promises as fsp } from 'fs';
+import node_fetch from 'node-fetch'
+import fg from 'fast-glob'
+import { promises as fsp } from 'fs'
+
 export async function read(resource = '') {
   if (resource.toLowerCase().startsWith('https://')) {
     console.log('async');
-    return fetch(resource).then(r => r.text());
+    return node_fetch(resource).then(r => r.text());
   }
 
   if (resource.toLocaleLowerCase() === 'date') {
@@ -17,5 +19,5 @@ export async function read(resource = '') {
       return file_text;
     })
   );
-  return list.join('\n\n');
+  return list.join('\n\n--\n\n');
 }

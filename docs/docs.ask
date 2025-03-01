@@ -1,15 +1,10 @@
-readme_text = read('Readme.md')
-engine_text = read('engine/**')
+drafts = read('docs/*.md')
 
-intro_text, architecture_text, template = `
+intro, documentation, template = `
   # Task
   From a provided payload you should generate a human readable description of a programming language 'Ask'.
   Payload contains source codes in 'js' files, manuals in 'md' files, and Ask-language files have '.ask' extension.
   It should be short overview for a small introduction.
-
-  <readme>
-  ${readme_text}
-  </readme>
 
   # Payload:
   ${engine_text}
@@ -20,16 +15,30 @@ intro_text, architecture_text, template = `
   Present all technical details in a well structured and concise manner.
   Be consice. Reply summary.
 
-  <readme>
-  ${readme_text}
-  </readme>
-
   # Payload:
   ${engine_text}
 ``
   # Task
   Provide a simple and robust Markdown template for using for documentation about framework.
   Use best practices such as link to npm, github, author, etc.
+`
+
+intro, architecture = `
+  # Task
+  Rewrite the text provided in the payload.
+  Fix grammatical and punctual errors.
+  It should sould professional and soft.
+
+  # Payload
+  ${intro}
+``
+  # Task
+  Rewrite the text provided in the payload.
+  Fix grammatical and punctual errors.
+  It should sould professional and soft.
+
+  # Payload
+  ${documentation}
 `
 
 valid, html = `
@@ -41,9 +50,20 @@ valid, html = `
   # Output
   If payload is valid, reply "valid".
   If payload is NOT valid, reply with error message.
+  
+  # Credits
+  Mention that this page was completely built by AI following instructions in Ask language.
+  Add link to my website: https://ask.k-lekh.com
+
+  # Template
+  ${template}
 
   # Payload
-  ${JSON.stringify({ intro_text, architecture_text, template }, null, 2)}
+  ## Intro
+  ${intro}
+
+  ## Architecture
+  ${architecture} 
 ``
   # Task
   Render the provided data to html.
@@ -55,10 +75,10 @@ valid, html = `
   ## Template
   ${template}
   ## Content
-  ### Intro text
-  ${intro_text}
+  ### Intro
+  ${intro}
   ### Architecture
-  ${architecture_text}
+  ${architecture}
 `
 
-return valid.trim() === "valid" ? html : valid
+return valid.trim().toLowerCase() === "valid" ? html : valid
