@@ -38,7 +38,7 @@ app.get('/', (req, res) => {
   res.sendStatus(200)
 })
 
-const port = process.env.PORT
+const port = process.env.ASK_PORT
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`)
 })
