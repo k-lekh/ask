@@ -62,7 +62,7 @@ const html = await ask(`
   [/original_html]
 `))
 await write(html, `${base}.html`)
-await write(html, `public/index.html`)
+await write(html, `public/index_new.html`)
 
 // so this way we progress from temporary artifacts to the desired by intent, which may be specified in the routine file path.
 return `${base}.html`
