@@ -19,19 +19,41 @@ const public_methods = {
 }
 
 app.all('*', async ({ path, body, method }, response) => {
-  console.log(chalk.bgGray({ path, source, method, body }))
+  const source = path.substring(1).replaceAll('%20', ' ')
+  const payload = String(body)
+  console.log(chalk.gray(`
+path    ${path}
+source  ${source}
+method  ${method}
+body    ${payload}
+  `.trim()))
 
-  const source = path.substring(1)
   if (public_methods[source]) {
-    console.log(chalk.cyan(`Run public method ${path}`))
-    response.send(await public_methods[path](body))
+    console.log(chalk.cyan(`Run public method ${source}`))
+    return response.send(await public_methods[source](payload))
   }
 
-  if (path.endsWith('.ask')) {
-    console.log(chalk.cyan(`Run server routine ${path}`))
-    console.log(chalk.gray(await read(path)))
-    response.send(await routine(path, body))
+  if (source.endsWith('.ask')) {
+    console.log(chalk.cyan(`Run server routine ${source}`))
+    console.log(chalk.gray(await read(source)))
+    return response.send(await routine(source, payload))
   }
+
+  if (source.endsWith('.ask.js')) {
+    console.log(chalk.cyan(`Run server routine (transpiled) ${source}`))
+    console.log(chalk.gray(await read(source)))
+    return response.send(await routine(source, payload, { transpiled: true }))
+  }
+
+  const content = await read(source)
+  if (content) {
+    console.log(chalk.cyan('Reply with content'))
+    console.log(content)
+    response.send(content)
+  }
+
+  console.log(chalk.red(source, 'Nothing to do'))
+  return response.send(source + ' Nothing to do')
 })
 
 app.get('/', async (request, response) => {

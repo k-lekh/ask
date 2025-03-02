@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-import { log } from './log.js'
+import chalk from 'chalk'
 import { hash } from './hash.js'
 import { write } from './write.js' 
 import { cache } from './cache.js'
@@ -41,7 +41,10 @@ const default_reply = `
 `
 
 let _ask = default_ask
-async function default_ask(task, payload, { model = default_model } = {}) {
+async function default_ask(_task, payload = '', { model = default_model } = {}) {
+  const task = _task?.trim?.() || '' // todo use in clean
+  // TODO: zero point, all requests starts here and then routed to other fundamentals
+
   if (task === '') {
     if (payload) {
       return payload
@@ -54,7 +57,10 @@ async function default_ask(task, payload, { model = default_model } = {}) {
     return ''
   }
 
-  const task_with_payload = (payload ? task + '\n' + payload : task).trim()
+  const task_with_payload = payload ? task + '\n' + String(payload) : task
+  console.log(typeof task_with_payload, task_with_payload)
+  // task_with_payload = task_with_payload.trim()
+  
   const started = Date.now()
   const id = await hash(task_with_payload);
   const log_id = `${id} Ask`;
@@ -86,7 +92,8 @@ ${task_with_payload}
 
   const { prompt_tokens, completion_tokens, total_tokens, completion_tokens_details: { reasoning_tokens } } = completion?.usage
   const stats = Object.entries({ prompt_tokens, completion_tokens, total_tokens, reasoning_tokens }).map(entry => entry.join('=')).join(', ')
-  await log(`Done in ${Date.now() - started} ms, used ${stats}`, log_id)
+  console.log(`Done in ${Date.now() - started} ms`)
+  console.log(chalk.gray(stats))
 
   return text_result
 }

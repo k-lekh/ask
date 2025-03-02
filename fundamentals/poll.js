@@ -13,7 +13,8 @@ async function default_poll(text, get_task_for_line) {
     return ''
   } 
   
-  return (await Promise.all(text.trim().split('\n').map((payload_line) => ask(get_task_for_line(payload_line)))).join('\n')).trim()
+  const result = await Promise.all(text.trim().split('\n').map((payload_line) => ask(get_task_for_line(payload_line))))
+  return result.join('\n').trim()
 }
 
 export const poll = _poll

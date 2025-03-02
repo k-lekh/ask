@@ -237,3 +237,10 @@ For example:
 ```ask
 
 ```
+
+# More
+Since you don't import many staff in your scripts, .ask or .ask.js - you are free to use any names available for your script. no "reserved word error", fuck it! it's free fucking framework, it's all text, write whatever you want.
+but you are responsible for the result. that's the deal.
+so, you IMPORT ONLY FUNDAMENTALS, mine or your, and write your script, and you are free to use any common name, which is not reserved by javascript engine, you don't even care about browser "надстройки над движком", hacky features.
+your routines are executed on server, in sandbox, with limited global functions. and you control what these functions are doing.
+you may redefine them before ask() calls, (but then you have to import them or not?).

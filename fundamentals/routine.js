@@ -15,6 +15,10 @@ const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor
 
 let _routine = routine_default
 async function routine_default(source, payload, { transpiled = false } = {}) {
+  console.log('>>> r source', source)
+  console.log('>>> r payload', payload)
+  console.log('>>> r transpiled', transpiled)
+
   const started = Date.now()
   if (typeof source === 'function') {
     _routine = source
