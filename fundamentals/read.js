@@ -1,5 +1,6 @@
 import node_fetch from 'node-fetch'
 import fg from 'fast-glob'
+import chalk from 'chalk'
 import { promises as fsp } from 'fs'
 
 export async function read(resource = '') {
@@ -12,8 +13,9 @@ export async function read(resource = '') {
   }
 
   const files = await fg(resource); 
-  if (files.length > 1) {
-    console.log('>> return', files.join('\n'))
+  if (files.length === 0) {
+    console.log(chalk.gray('No files for resource', resource))
+  } else if (files.length > 1) {
     return files.join('\n')
   }
 

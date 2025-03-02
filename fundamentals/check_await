@@ -1,3 +1,0 @@
-files = read(fundamentals/*.js) poll`
-  
-` 

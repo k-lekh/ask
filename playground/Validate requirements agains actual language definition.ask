@@ -1,0 +1,12 @@
+definition = routines/Ask language definition.ask
+
+read(*.md) poll`
+  # Task
+  Validate provided content against the actual Ask language definition
+
+  # Ask language definition
+  ${definition}
+
+  # Content
+  ${payload}
+`

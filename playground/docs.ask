@@ -1,4 +1,1 @@
-write(`
-    
-  from the provided 
-`, public/)
+files = read(*/*.md) ``

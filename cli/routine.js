@@ -1,6 +1,7 @@
 import readline from 'readline'
 import chalk from 'chalk'
-import { routine } from '../fundamentals/routine.js';
+import { routine } from '../fundamentals/routine.js'
+import { read } from '../fundamentals/read.js'
 
 const run_id = Date.now()
 
@@ -12,9 +13,10 @@ const io = readline.createInterface({
 
 let last_result = ''
 async function run_routine(source, payload) {
-  console.log(chalk.cyan('run_routine', source))
+  console.log(chalk.cyan('Run routine', source))
   
   const result = await routine(source, payload ?? last_result)
+  console.log(chalk.cyan(result))
   last_result = result
   
   return result
@@ -30,6 +32,10 @@ async function exit(code) {
 process.on('SIGINT', () => exit('SIGINT'))
 process.on('SIGTERM', () => exit('SIGTERM'))
 
-const [first_path, first_payload] = process.argv.slice(2) || [];
-console.log({ first_path, first_payload })
-await run_routine(first_path, first_payload);
+const [first_path, first_payload] = process.argv.slice(2) || []
+await run_routine(first_path || `
+  // display default reply
+  return ask('');
+
+  // transpiled routine is just javascript
+`, first_payload);

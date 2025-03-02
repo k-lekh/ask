@@ -1,0 +1,13 @@
+js = transpile(playground/python.ask)
+
+`
+  playground/python.ask
+  
+` poll`
+  # Task
+  Convert the following JavaScript code to Python 3.
+
+  <js>
+  ${js}
+  </js>
+`

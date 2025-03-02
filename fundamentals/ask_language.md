@@ -6,7 +6,6 @@ Transpiler adds all necessary syntax to convert ask language to valid javascript
 In human code, I prefer clean and minimalistic style.
 In generated code, I prefer more strict rules, such as adding ';' to the end of the executable line;
 
-# Examples
 ##  Single Ask
 <input lang="ask">
     intent = "Regular text constant"
@@ -213,6 +212,18 @@ In generated code, I prefer more strict rules, such as adding ';' to the end of 
     Generate html
   `, { model: 'o3-mini' })
 </output>
+
+## Poll
+<ask>
+content = read(path/to/folder/*.md) poll`
+  Return summary in one sentence
+`
+</ask>
+<js>
+const content = await poll(await read(`path/to/folder/*.md`), `
+  Return summary in one sentence
+`)
+</js>
 
 # Any order
 In Ask the order of instructions does not matter, because transpiler will handle it.

@@ -11,3 +11,6 @@ unique_exts = read(cache/*) poll`
 
 # Dash
 Dash operator means: take payload from left ask and send it as a payload to the right one.
+
+# По-линиям
+А еще POLL звучит похоже на ПО Линиям.

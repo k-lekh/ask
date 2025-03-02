@@ -10,6 +10,8 @@ import { log } from './log.js'
 import { find } from './find.js'
 import { clean } from './clean.js'
 import { hash } from './hash.js'
+import { cache } from './cache.js'
+import { poll } from './poll.js'
 
 ['./cache', './cache/routine'].forEach(dir => {
   if (!fs.existsSync(path.resolve(dir))) {
@@ -17,8 +19,10 @@ import { hash } from './hash.js'
   }  
 })
 
+const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor
+
 let _routine = routine_default
-async function routine_default(source, payload) {
+async function routine_default(source, payload, { transpiled = false } = {}) {
   const started = Date.now()
   if (typeof source === 'function') {
     _routine = source
@@ -26,7 +30,7 @@ async function routine_default(source, payload) {
   }
 
   const routine_text = await read(source) || source  
-  const routine_with_payload = (payload ? `${source}\n\n# Payload:\n${payload}` : source).trim()
+  let routine_with_payload = (transpiled || !payload ? routine_text : `${routine_text}\n\n# Payload:\n${payload}`).trim()
   
   const id = await hash(routine_with_payload)
   const cache_path = `cache/routine/${id}`
@@ -37,18 +41,22 @@ async function routine_default(source, payload) {
 
   const log_id = `${id} Routine`
   log(chalk.bgGrey('Routine text'), log_id)
-  log(chalk.grey(routine_with_payload), log_id)
+  console.log(chalk.grey(routine_with_payload))
   
-  const js_code = await transpile(routine_with_payload)
-  const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor
-  const async_func = new AsyncFunction('ask', 'read', 'write', 'fetch', 'find', 'transpile', 'hash', 'log', js_code)
+  const js_code = transpiled ? routine_with_payload : await transpile(routine_with_payload)
+  const async_func = new AsyncFunction('ask', 'read', 'poll', 'write', 'fetch', 'find', 'transpile', 'hash', 'log', js_code)
   log(chalk.bgGreen('Created async function'), log_id)
-  log(chalk.green(async_func.toString()), log_id)
+  console.log(chalk.green(async_func.toString()))
   
-  const async_func_result = await clean(await async_func(ask, read, write, node_fetch, find, transpile, hash, log))
-  log(`await async_func = `, log_id)
-  log(async_func_result, log_id)
-  write(async_func_result, cache_path)
+  let async_func_result = ''
+  try {
+    async_func_result = await clean(await async_func(ask, read, poll, write, node_fetch, find, transpile, hash, log))
+    console.log(chalk.green(async_func_result))
+  } catch (e) {
+    async_func_result = e.message || String(e)
+    console.log(chalk.red(async_func_result))
+  }
+  cache(async_func_result, cache_path)
 
   log(`Done in ${Date.now() - started} ms`, log_id)
   return async_func_result

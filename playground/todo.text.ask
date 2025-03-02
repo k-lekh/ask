@@ -1,0 +1,47 @@
+todos = o1`
+# Task
+From the provided todo list extract all intentions and meaningful tasks.
+
+# TODO
+- таска для незаконченных черновиков
+читаю все файлы какие есть
+в каждом ищу синтаксис аска
+если файл на аске
+
+- опубликовать в brew
+
+- desktop app
+  - good file browser with ask editor and runner.
+  - with good syntax highlight.
+  - debugger available in vs code with plugin.
+
+  - desktop app is built from widgets
+    <iframe src="/routines/balance.html.ask" border="none" />
+    <img src="/media/improved logo.img.ask" />
+    <video src="/media/product demo short square.video.ask"
+    <iframe src="/dialogues/icon styled count of updates ready for deploy.img.ask" border="none" />
+    - it checks headers of the request, which runner gets as payload, and finds best suitable img format
+    - it caches output, and cache_path have session_id, or smth like this
+  - desktop app is .ask app:
+
+  - questions
+    first server reply with ask text, ok, but how then push result?
+`
+
+markdown = o3-mini`
+  # Task format 
+  Format the provided tasks list in Markdown.
+
+  # Tasks list
+  ${todos}
+` 
+
+o1`
+  <task>
+  Render provided markdown for the stdout terminal output as a table.
+  </task>
+
+  <markdown>
+  ${markdown}
+  </markdown>
+`

@@ -1,10 +1,10 @@
 import path from 'path'
-import chalk from 'chalk'
 import dotenv from 'dotenv'
 import fs from 'fs'
 import { log } from './log.js'
 import { hash } from './hash.js'
 import { write } from './write.js' 
+import { cache } from './cache.js'
 
 dotenv.config()
 const default_model = 'o3-mini-2025-01-31'
@@ -61,18 +61,15 @@ async function default_ask(task, payload, { model = default_model } = {}) {
     return ''
   }
 
-  const task_with_payload = (payload ? `${task}\n\n# Payload:\n${payload}` : task).trim()
+  const task_with_payload = (payload ? task + '\n' + payload : task).trim()
   const started = Date.now()
   const id = await hash(task_with_payload);
   const log_id = `${id} Ask`;
 
-  const cache_path = path.resolve(`./cache/ask/${id}.${model}`);  
-  if (fs.existsSync(cache_path)) {
-    const cache_text = fs.readFileSync(cache_path, 'utf8');
-    if (cache_text) {
-      log(chalk.gray(`Cache read ${cache_path}`), log_id);
-      return cache_text;
-    }
+  const cache_path = `cache/ask/${id}.${model}`  
+  const cache_text = await cache(cache_path)
+  if (cache_text) {
+    return cache_text
   }
 
   const completion = await openai.chat.completions.create({
@@ -92,7 +89,7 @@ ${task_with_payload}
       }]
   });
   const text_result = completion?.choices?.map(choice => choice?.message?.content).filter(Boolean).join('\n\n')
-  await write(cache_path, text_result)
+  await write(text_result, cache_path)
 
   const { prompt_tokens, completion_tokens, total_tokens, completion_tokens_details: { reasoning_tokens } } = completion?.usage
   const stats = Object.entries({ prompt_tokens, completion_tokens, total_tokens, reasoning_tokens }).map(entry => entry.join('=')).join(', ')

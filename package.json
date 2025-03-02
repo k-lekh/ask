@@ -7,7 +7,7 @@
   "scripts": {
     "release": "npm version patch && npm publish --access=public",
     "deploy": "gh-pages -d public",
-    "talk": "node ./cli/talk.js",
+    "ask": "node ./cli/ask.js",
     "routine": "node ./cli/routine.js",
     "server": "node ./server/server.js",
     "server_watch": "nodemon ./server/server.js",

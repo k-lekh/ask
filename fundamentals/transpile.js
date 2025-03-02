@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import { hash } from './hash.js'
 import { read } from './read.js'
-import { write } from './write.js'
+import { cache } from './cache.js'
 import { ask } from './ask.js'
 import { clean } from './clean.js'
 import { log } from './log.js'
@@ -12,14 +12,16 @@ import { log } from './log.js'
  * Then instant async call of this function retreives a result of executing instructions described in the original payload in Ask-language.
  */
 export const transpile = async (ask_text) => {
-  const id = hash(ask_text)
-  const cache_path = `cache/transpile/${id}.js`
-  const cache_js = read(cache_path)
+  const id = await hash(ask_text)
+  const cache_path = `cache/transpile/${id}.ask.js`
+  const cache_js = await read(cache_path)
   if (cache_js) {
-    log(chalk.bgCyan(`${id} Transpile reply from cache`))
+    await log(chalk.bgCyan(`${id} Transpile reply from cache`))
     return cache_js
   }
 
+  await log(chalk.green(`${id} Transpile...`), id)
+  console.log(chalk.gray(ask_text))
   const rules = await ask(`
     # Role
     You are code analyser.
@@ -28,8 +30,8 @@ export const transpile = async (ask_text) => {
     Reply in the most common used for this purpose format.
 
     # Language definition
-    ${await read('engine/Ask-language.md')}
-  `)
+    ${await read('fundamentals/ask_language.md')}
+  `, { model: 'o1' })
 
   const js = await ask(`
     # Role
@@ -56,11 +58,11 @@ export const transpile = async (ask_text) => {
 
     # Code to transpile
     ${ask_text}
-  `);
+  `, { model: 'o1' })
 
-  const clean_js = clean(js)
-  write(clean_js, cache_path)
-  log(chalk.bgGrey(`Transpiled`), id);
-  log(chalk.grey(clean_js));
+  const clean_js = await clean(js)
+  await cache(clean_js, cache_path)
+  await log(chalk.green(`Transpiled`), id);
+  console.log(chalk.grey(clean_js));
   return clean_js
 }

@@ -21,7 +21,7 @@ async function run_ask(task, payload) {
 }
 
 io.on('line', async (input) => {
-  console.log('--')
+  console.log('\n--')
   console.log(chalk.cyan(await run_ask(input)))
   console.log('--')
 })
