@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <style>
+      html, body {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+      }
+      ask {
+        text-shadow: 0 0 2px #ddbaff;
+        height: 100%;
+        display: flex;
+        white-space: pre-wrap;
+        font-family: monospace;
+        background: linear-gradient(135deg, #ff6ec4, #7873f5);
+        background-size: 300% 400%;
+        animation: gradient 20sease infinite;
+        padding: 0;
+        border: none;
+      }
+      ask:before {
+        left: 0;
+        top: 0;
+        position: absolute;
+        padding: 4px 0 0 4px;
+        font-size: 80%;
+        display: block;
+        content: '.ask';
+        opacity: 1;
+        color: rgba(0,0,0,0.5);
+        border-bottom: 1px dashed currentColor;
+        text-shadow: none;
+      }
+      @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+    </style>
+    <ask>
+      body_html = task(read('tasks/widget_body.ask'))
+
+      let inner = body_html || ''
+      if (inner.startsWith('<body>')) {
+        inner = inner.slice(6)
+      }
+      if (inner.endsWith('</body>')) {
+        inner = inner.slice(0, inner.length - 7)
+      }
+
+      return inner
+    </ask>
+    <script>
+      const ask_element = document.getElementsByTagName('ask')?.[0];
+      ask_element?.addEventListener('click', async (event) => {
+        const task_text = ask_element.textContent?.trim();
+        if (task_text) {
+          console.log('Run <ask> node task', task_text);
+          const result = await fetch('http://localhost:9000/task', {
+            method: 'POST',
+            body: task_text,
+          }).then(r => r.text());
+          console.log('>> result', { result });
+          if (result) {
+            document.body.innerHTML = result;
+          }
+        } else {
+          console.log('No task in the <ask>');
+        }
+      });
+    </script>
+  </body>
+</html>
