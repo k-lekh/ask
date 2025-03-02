@@ -202,6 +202,7 @@ In generated code, I prefer more strict rules, such as adding ';' to the end of 
 </output>
 
 ## Specify model
+Model name is a prefix before ` symbol
 <input lang="ask">
   html = o3-mini `
     Generate html

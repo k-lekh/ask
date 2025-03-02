@@ -1,4 +1,4 @@
-todos = o1`
+todos = `
 # Task
 From the provided todo list extract all intentions and meaningful tasks.
 
@@ -28,7 +28,7 @@ From the provided todo list extract all intentions and meaningful tasks.
     first server reply with ask text, ok, but how then push result?
 `
 
-markdown = o3-mini`
+markdown = `
   # Task format 
   Format the provided tasks list in Markdown.
 
@@ -36,7 +36,7 @@ markdown = o3-mini`
   ${todos}
 ` 
 
-o1`
+return `
   <task>
   Render provided markdown for the stdout terminal output as a table.
   </task>

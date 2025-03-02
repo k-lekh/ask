@@ -20,12 +20,6 @@ const rules = `
 `.trim()
 const openai = new OpenAI()
 
-;['./cache', './cache/ask'].forEach(dir => {
-  if (!fs.existsSync(path.resolve(dir))) {
-    fs.mkdirSync(path.resolve(dir))
-  }  
-})
-
 const default_reply = `
   Hello, I'm the first Ask instance.
   Ask anything to start communication.

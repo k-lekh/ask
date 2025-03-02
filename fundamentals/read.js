@@ -14,7 +14,7 @@ export async function read(resource = '') {
 
   const files = await fg(resource); 
   if (files.length === 0) {
-    console.log(chalk.gray('No files for resource', resource))
+    console.log(chalk.gray('read no files', resource))
   } else if (files.length > 1) {
     return files.join('\n')
   }
