@@ -18,14 +18,17 @@ import { hash } from './hash.js'
 })
 
 let _routine = routine_default
-async function routine_default(routine_source, routine_payload) {
+async function routine_default(source, payload) {
   const started = Date.now()
-  if (typeof routine_source === 'function') {
-    _routine = routine_source
+  if (typeof source === 'function') {
+    _routine = source
+    return ''
   }
 
-  const routine_text = await read(routine_source) || routine_source  
-  const id = await hash(routine_text)
+  const routine_text = await read(source) || source  
+  const routine_with_payload = (payload ? `${source}\n\n# Payload:\n${payload}` : source).trim()
+  
+  const id = await hash(routine_with_payload)
   const cache_path = `cache/routine/${id}`
   const cache_routine = await read(cache_path)
   if (cache_routine) {
@@ -34,17 +37,15 @@ async function routine_default(routine_source, routine_payload) {
 
   const log_id = `${id} Routine`
   log(chalk.bgGrey('Routine text'), log_id)
-  log(chalk.grey(routine_text), log_id)
+  log(chalk.grey(routine_with_payload), log_id)
   
-  const js_code = await transpile(routine_text)
+  const js_code = await transpile(routine_with_payload)
   const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor
-  const async_func = new AsyncFunction('ask', 'read', 'write', 'fetch', 'find', js_code)
+  const async_func = new AsyncFunction('ask', 'read', 'write', 'fetch', 'find', 'transpile', 'hash', 'log', js_code)
   log(chalk.bgGreen('Created async function'), log_id)
   log(chalk.green(async_func.toString()), log_id)
   
-  const async_func_result = await clean(
-    await async_func(ask, read, write, node_fetch, find)
-  )
+  const async_func_result = await clean(await async_func(ask, read, write, node_fetch, find, transpile, hash, log))
   log(`await async_func = `, log_id)
   log(async_func_result, log_id)
   write(async_func_result, cache_path)

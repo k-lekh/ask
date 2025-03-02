@@ -1,7 +1,10 @@
+
 import readline from 'readline'
 import chalk from 'chalk'
 import { ask } from '../fundamentals/ask.js'
 import { log } from '../fundamentals/log.js'
+
+const run_id = Date.now()
 
 const io = readline.createInterface({
   input: process.stdin,
@@ -9,23 +12,26 @@ const io = readline.createInterface({
   terminal: true
 });
 
-console.log(chalk.cyan(await ask('')))
+let last_result = ''
+async function run_ask(task, payload) {
+  const result = await ask(task, payload ?? last_result)
+  last_result = result
 
-const run_id = Date.now()
+  return result
+}
+
 io.on('line', async (input) => {
-  /** @todo
-   * infinite talk where user input executes as ask or routine, which receives previous answer as a payload
-   */
-  await ask(input)
-});
+  console.log('--')
+  console.log(chalk.cyan(await run_ask(input)))
+  console.log('--')
+})
 
 async function exit(code) {
   await log(chalk.bgRed(code), run_id)
   io.close()
   process.exit(0)
 }
-
-process.on('SIGINT', () => exit('SIGINT'));
+process.on('SIGINT', () => exit('SIGINT'))
 process.on('SIGTERM', () => exit('SIGTERM'))
 
-console.log(chalk.gray(run_id, 'Program is running.\n'))
+console.log(chalk.cyan(await run_ask('')))

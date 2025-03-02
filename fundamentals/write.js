@@ -22,7 +22,7 @@ export async function write(text, destination) {
       }
     }
     await fsp.writeFile(file_path , text);
-    console.log(chalk.green(`Saved to ${file_path}`));
+    console.log(chalk.gray(`write ${file_path}`));
     return text
   } catch(error) {
     return ''

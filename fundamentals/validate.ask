@@ -1,0 +1,15 @@
+fundamentals = read(fundamentals/*.js)
+
+errors = fundamentals poll`
+  # Task
+  This is the list of special functions
+  ${fundamentals}
+
+  Find all these functions in the provided source code, and check if they have `await` before their call.
+
+  Wrong: const x = ask(`...`)
+  Valid: const x = await ask(`...`)
+
+  # Source code
+  ${payload}
+`

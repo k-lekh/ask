@@ -1,10 +1,10 @@
 import path from 'path'
-import fs from 'fs'
-import md5 from 'md5'
 import chalk from 'chalk'
 import dotenv from 'dotenv'
+import fs from 'fs'
 import { log } from './log.js'
 import { hash } from './hash.js'
+import { write } from './write.js' 
 
 dotenv.config()
 const default_model = 'o3-mini-2025-01-31'
@@ -63,15 +63,14 @@ async function default_ask(task, payload, { model = default_model } = {}) {
 
   const task_with_payload = (payload ? `${task}\n\n# Payload:\n${payload}` : task).trim()
   const started = Date.now()
-  const id = hash(task_with_payload);
+  const id = await hash(task_with_payload);
   const log_id = `${id} Ask`;
-  log(chalk.cyan(task_with_payload), log_id)
 
   const cache_path = path.resolve(`./cache/ask/${id}.${model}`);  
   if (fs.existsSync(cache_path)) {
     const cache_text = fs.readFileSync(cache_path, 'utf8');
     if (cache_text) {
-      log(chalk.cyan(`Cache read ${cache_key}`), log_id);
+      log(chalk.gray(`Cache read ${cache_path}`), log_id);
       return cache_text;
     }
   }
@@ -88,17 +87,16 @@ ${rules}
 
 
 
-${input_task}
+${task_with_payload}
         `.trim(),
       }]
   });
   const text_result = completion?.choices?.map(choice => choice?.message?.content).filter(Boolean).join('\n\n')
-  fs.writeFileSync(cache_path, text_result)
-  log(chalk.cyan(`Cache write ${cache_key}`), log_id);
+  await write(cache_path, text_result)
 
   const { prompt_tokens, completion_tokens, total_tokens, completion_tokens_details: { reasoning_tokens } } = completion?.usage
   const stats = Object.entries({ prompt_tokens, completion_tokens, total_tokens, reasoning_tokens }).map(entry => entry.join('=')).join(', ')
-  log(`Done in ${Date.now() - started} ms, used ${stats}`, log_id)
+  await log(`Done in ${Date.now() - started} ms, used ${stats}`, log_id)
 
   return text_result
 }

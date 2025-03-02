@@ -3,11 +3,11 @@ But I will give it a shot.
 ```ask
 
 // run ask for eachline
-lines(source)[`
+poll(source)[`
   task for each line
 `]
 ```
 
-lines(ls(path))[`
+poll(ls(path))`
   task for each line
-`]
+` > 
