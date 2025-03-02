@@ -1,10 +1,9 @@
-import path from 'path'
 import dotenv from 'dotenv'
-import fs from 'fs'
 import { log } from './log.js'
 import { hash } from './hash.js'
 import { write } from './write.js' 
 import { cache } from './cache.js'
+import '../console/colors.js'
 
 dotenv.config()
 const default_model = 'o3-mini-2025-01-31'

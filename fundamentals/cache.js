@@ -6,7 +6,8 @@ import { write } from '../fundamentals/write.js'
 ;[
   './cache', 
   './cache/ask',
-  './cache/transpile'
+  './cache/routine',
+  './cache/transpile',
 ].forEach(dir => {
   if (!fs.existsSync(path.resolve(dir))) {
     fs.mkdirSync(path.resolve(dir))

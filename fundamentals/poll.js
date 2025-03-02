@@ -7,13 +7,13 @@
 import { ask } from './ask.js'
 
 let _poll = default_poll
-async function default_poll(text, task_for_line) {
+async function default_poll(text, get_task_for_line) {
   if (typeof text === 'function') {
     _poll = text
     return ''
   } 
   
-  return (await Promise.all(text.trim().split('\n').map((payload_line) => ask(task_for_line, payload_line))).join('\n')).trim()
+  return (await Promise.all(text.trim().split('\n').map((payload_line) => ask(get_task_for_line(payload_line)))).join('\n')).trim()
 }
 
 export const poll = _poll

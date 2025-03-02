@@ -1,8 +1,9 @@
 todos = `
-# Task
-From the provided todo list extract all intentions and meaningful tasks.
-
-# TODO
+<task>
+From the provided todo list extract all intentions and todos.
+Reply in text.
+</task>
+<todo>
 - таска для незаконченных черновиков
 читаю все файлы какие есть
 в каждом ищу синтаксис аска
@@ -26,17 +27,18 @@ From the provided todo list extract all intentions and meaningful tasks.
 
   - questions
     first server reply with ask text, ok, but how then push result?
+  </todo>
 `
 
 markdown = `
-  # Task format 
-  Format the provided tasks list in Markdown.
+  # Task 
+  Return the provided tasks list in Markdown.
 
-  # Tasks list
+  # Todos
   ${todos}
 ` 
 
-return `
+write(`
   <task>
   Render provided markdown for the stdout terminal output as a table.
   </task>
@@ -44,4 +46,4 @@ return `
   <markdown>
   ${markdown}
   </markdown>
-`
+`, 'playground/todo.md')

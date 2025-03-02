@@ -11,9 +11,13 @@ import { log } from './log.js'
  * This code may be used to create a run-time anonymous async function.
  * Then instant async call of this function retreives a result of executing instructions described in the original payload in Ask-language.
  */
-export const transpile = async (ask_text, { model = 'o3-mini' } = {}) => {
+export const transpile = async (ask_text, { model = 'o3-mini', cache_file } = {}) => {
+  if (!ask_text) {
+    return ''
+  }
+
   const id = await hash(ask_text)
-  const cache_path = `cache/transpile/${id}.${model}.ask.js`
+  const cache_path = cache_file ?? `cache/transpile/${id}.${model}.ask.js`
   const cache_js = await read(cache_path)
   if (cache_js) {
     await log(chalk.bgCyan(`${id} Transpile reply from cache`))

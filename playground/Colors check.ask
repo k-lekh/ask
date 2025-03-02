@@ -1,0 +1,30 @@
+/**
+  `
+    ask anything
+    and return it as a conts 'payload'
+  ` payload => `
+    ask anything
+    about ${payload}
+  `
+*/
+
+functions = read(fundamentals/*.js) name > o3-mini`
+
+`
+console.log('>> functions', functions)
+
+
+
+colors, functions = `
+  From the provided description of project visual design you should extract colors for every architecture domain.
+
+  <description>
+  ${read(playground/Color.md)}
+  </description>
+``
+  From the provided description of project visual design you should extract colors for every architecture domain.
+
+  <description>
+  ${read(playground/Color.md)}
+  </description>
+`

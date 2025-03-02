@@ -1,6 +1,8 @@
 fundamentals = read(fundamentals/*.js) 
 
-md = read(fundamentals/*.js) poll`
+fundamentals = read(fundamentals/*.js)
+
+result = poll(fundamentals, payload => `
   # Task
   You are be provided with a list of "special" functions.
   In the provided javascript code check if all "special" function calls are made async.
@@ -8,7 +10,11 @@ md = read(fundamentals/*.js) poll`
   # Output
   Reply with empty string if all "special" calls are async.
   In the reply include 1 line before and 1 line after, if any.
-  Reply in Markdown, include filename in the report.
+  Above the error place file name.
+  Reply in Markdown with titles and subtitles
+
+  # Special functions
+  ${fundamentals}
 
   # Examples
   <valid>
@@ -18,9 +24,10 @@ md = read(fundamentals/*.js) poll`
     const data = read('docs/index.md)
   </valid>
 
-  # Code to Validate
-  ## Filename: ${payload}
+  # Code to Validate from file '(${payload})'
+  <input>
   ${read(payload)}
-`
+  </input>
+`)
 
-write(md, fundamentals/check_await.ask.md)
+write(result, fundamentals/check_await.ask.md)
