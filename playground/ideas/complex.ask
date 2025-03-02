@@ -1,2 +1,2 @@
-widget1, widget2 = task('engine/widget1.ask', 'liquid'), task('engine/widget2.ask', 'liquid')
-html 
+widget1, widget2 = task(widgets/widget1.ask, liquid), task('engine/demo/widget2.ask', 'liquid')
+header = task('widgets/demo.ask)

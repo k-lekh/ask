@@ -3,7 +3,8 @@ import { hash } from './hash.js'
 import { read } from './read.js'
 import { write } from './write.js'
 import { ask } from './ask.js'
-import { clean} from './clean.js'
+import { clean } from './clean.js'
+import { log } from './log.js'
 
 /**
  * Transpiles argument written in Ask-language to a javascript code.
@@ -15,6 +16,7 @@ export const transpile = async (ask_text) => {
   const cache_path = `cache/transpile/${id}.js`
   const cache_js = read(cache_path)
   if (cache_js) {
+    log(chalk.bgCyan(`${id} Transpile reply from cache`))
     return cache_js
   }
 

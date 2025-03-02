@@ -25,3 +25,5 @@ task = `
 `
 write(docs/drafts/How to use it.md.reply)
 return task
+
+// what i am going to do, requirements, preferences how to do this

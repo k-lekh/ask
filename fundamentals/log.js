@@ -28,3 +28,4 @@ export async function default_log(payload = '', log_id = '') {
 }
 
 export const log = _log
+

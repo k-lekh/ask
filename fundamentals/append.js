@@ -8,10 +8,7 @@ async function default_append(patch, destination) {
     return ''
   }
 
-  return write(
-    await read(destination) + '\n\n' + patch,
-    destination
-  )
+  return await write(await read(destination) + '\n' + patch, destination)
 }
 
 export const append = _append

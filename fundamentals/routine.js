@@ -9,7 +9,7 @@ import { write } from './write.js'
 import { log } from './log.js'
 import { find } from './find.js'
 import { clean } from './clean.js'
-import { id } from './hash.js'
+import { hash } from './hash.js'
 
 ['./cache', './cache/routine'].forEach(dir => {
   if (!fs.existsSync(path.resolve(dir))) {
@@ -25,8 +25,8 @@ async function routine_default(routine_source, routine_payload) {
   }
 
   const routine_text = await read(routine_source) || routine_source  
-  const hash = id(routine_text)
-  const cache_path = `cache/routine/${hash}`
+  const id = await hash(routine_text)
+  const cache_path = `cache/routine/${id}`
   const cache_routine = await read(cache_path)
   if (cache_routine) {
     return cache_routine
@@ -42,7 +42,7 @@ async function routine_default(routine_source, routine_payload) {
   log(chalk.bgGreen('Created async function'), log_id)
   log(chalk.green(async_func.toString()), log_id)
   
-  const async_func_result = clean(
+  const async_func_result = await clean(
     await async_func(ask, read, write, node_fetch, find)
   )
   log(`await async_func = `, log_id)
@@ -50,7 +50,7 @@ async function routine_default(routine_source, routine_payload) {
   write(async_func_result, cache_path)
 
   log(`Done in ${Date.now() - started} ms`, log_id)
-  return result
+  return async_func_result
 }
 
 export const routine = _routine

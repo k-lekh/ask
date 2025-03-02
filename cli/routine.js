@@ -9,23 +9,17 @@ const io = readline.createInterface({
 });
 
 let last_result = ''
-let busy = false
-async function run_routine(input) {
-  console.log(chalk.cyan('run_routine', `busy=${busy}`, input))
-  if (busy) {
-    console.log(chalk.bgWhite('Busy'))
-    return;
-  }
-
-  busy = true
-  const result = await routine(input, last_result)
+async function run_routine(source, payload) {
+  console.log(chalk.cyan('run_routine', source))
+  
+  const result = await routine(source, payload ?? last_result)
   last_result = result
-  busy = false
-
+  
   return result
 }
 
 io.on('line', async (input) => console.log(await run_routine(input)))
 
-const args = process.argv.slice(2) || [];
-run_routine(path.resolve(args[0]), args[1]);
+const [first_path, first_payload] = process.argv.slice(2) || [];
+console.log({ first_path, first_payload })
+run_routine(first_path, first_payload);

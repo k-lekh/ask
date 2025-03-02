@@ -1,0 +1,21 @@
+files = read(fundamentals/*.js) poll`
+  # Task
+  Return only file name
+
+  # Examples
+  input: dev/files/script.js
+  output: script.js
+`-`
+  ${payload}.js,
+`
+
+content = `
+  export conts fundamentals = {
+    ${files}
+  }
+`-`
+  # Task
+  Prettify json in the payload
+`
+
+write(content, 'fundamentals/index.ask.js')

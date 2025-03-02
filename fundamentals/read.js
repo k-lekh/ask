@@ -4,7 +4,6 @@ import { promises as fsp } from 'fs'
 
 export async function read(resource = '') {
   if (resource.toLowerCase().startsWith('https://')) {
-    console.log('async');
     return node_fetch(resource).then(r => r.text());
   }
 
@@ -13,15 +12,15 @@ export async function read(resource = '') {
   }
 
   const files = await fg(resource); 
-  const list = await Promise.all(
-    files.map(async (file_path) => {
-      const file_text = await fsp.readFile(file_path, 'utf8');
-      return `
-        <file path="${file_path}">
-        ${file_text}
-        </file>
-      `;
-    })
-  );
-  return list.join('\n');
+  if (files.length > 1) {
+    console.log('>> return', files.join('\n'))
+    return files.join('\n')
+  }
+
+  const [file_path] = files
+  if (!file_path) {
+    return ''
+  }
+  
+  return await fsp.readFile(file_path, 'utf8');
 }

@@ -11,7 +11,7 @@ export async function write(text, destination) {
   if (!destination) {
     console.log(chalk.bgWhite('Write without destination'))
     console.log(chalk.white(text))
-    return '';
+    return ''
   }
   try {
     const file_path = path.resolve(destination);
@@ -22,8 +22,9 @@ export async function write(text, destination) {
       }
     }
     await fsp.writeFile(file_path , text);
-    return chalk.bgGreen(`Saved to ${file_path}`);
+    console.log(chalk.green(`Saved to ${file_path}`));
+    return text
   } catch(error) {
-    return error;
+    return ''
   }
 }

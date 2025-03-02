@@ -1,6 +1,12 @@
+import path from 'path'
+import fs from 'fs'
+import md5 from 'md5'
+import chalk from 'chalk'
 import dotenv from 'dotenv'
-dotenv.config()
+import { log } from './log.js'
+import { hash } from './hash.js'
 
+dotenv.config()
 const default_model = 'o3-mini-2025-01-31'
 
 import OpenAI from "openai"
@@ -14,47 +20,58 @@ const rules = `
 `.trim()
 const openai = new OpenAI()
 
-import path from 'path'
-import fs from 'fs'
-import md5 from 'md5'
-import chalk from 'chalk'
-import { log } from './log.js'
-
-['./cache', './cache/ask'].forEach(dir => {
+;['./cache', './cache/ask'].forEach(dir => {
   if (!fs.existsSync(path.resolve(dir))) {
     fs.mkdirSync(path.resolve(dir))
   }  
 })
 
+const default_reply = `
+  Hello, I'm the first Ask instance.
+  Ask anything to start communication.
+
+  # I have the following fundamentals
+  routine,
+  find,
+  read,
+  poll,
+  write,
+  append,
+  prepend,
+  log,
+  hash,
+  clean,
+  transpile.
+
+  # Pricing
+  Currently I spend money of my author.
+`
+
 let _ask = default_ask
-async function default_ask(arg1, input_payload, {
-  model = default_model,
-} = {}) {
-  if (arg1 === '') {
+async function default_ask(task, payload, { model = default_model } = {}) {
+  if (task === '') {
+    if (payload) {
+      return payload
+    }
+    return default_reply
+  }
+
+  if (typeof task === 'function') {
+    _ask = task
     return ''
   }
 
-  if (typeof arg1 === 'function') {
-    _ask = arg1
-    return;
-  }
-
-  let input_task = arg1 ?? ''
-  if (input_payload) {
-    input_task = input_task + '\n\n# Payload:\n' + input_payload
-  }
+  const task_with_payload = (payload ? `${task}\n\n# Payload:\n${payload}` : task).trim()
   const started = Date.now()
+  const id = hash(task_with_payload);
+  const log_id = `${id} Ask`;
+  log(chalk.cyan(task_with_payload), log_id)
 
-  let task_intent = input_task.trim().substring(0, 100) + "...";
-  const cache_key = md5(input_task);
-  const log_id = `${cache_key} Ask`;
-  const cache_path = path.resolve(`./cache/ask/${cache_key}.${model}`);
-  log(chalk.bgCyan(task_intent), log_id)
-  
+  const cache_path = path.resolve(`./cache/ask/${id}.${model}`);  
   if (fs.existsSync(cache_path)) {
     const cache_text = fs.readFileSync(cache_path, 'utf8');
     if (cache_text) {
-      log(chalk.cyan(`Answered from cache ${cache_key}`), log_id);
+      log(chalk.cyan(`Cache read ${cache_key}`), log_id);
       return cache_text;
     }
   }
@@ -77,9 +94,11 @@ ${input_task}
   });
   const text_result = completion?.choices?.map(choice => choice?.message?.content).filter(Boolean).join('\n\n')
   fs.writeFileSync(cache_path, text_result)
-  log(chalk.cyan('Cached'), log_id);
+  log(chalk.cyan(`Cache write ${cache_key}`), log_id);
 
-  log(`Done in ${Date.now() - started} ms, used ${JSON.stringify(completion?.usage ?? {}, null, 2)}`, log_id)
+  const { prompt_tokens, completion_tokens, total_tokens, completion_tokens_details: { reasoning_tokens } } = completion?.usage
+  const stats = Object.entries({ prompt_tokens, completion_tokens, total_tokens, reasoning_tokens }).map(entry => entry.join('=')).join(', ')
+  log(`Done in ${Date.now() - started} ms, used ${stats}`, log_id)
 
   return text_result
 }

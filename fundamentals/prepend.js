@@ -1,10 +1,9 @@
 import { write } from './write.js'
 import { read } from './read.js'
 
-export async function prepend(a, b) {
-  const [destination, patch] = [a, b]
-  return write(
-    destination,
-    patch + '\n\n' + await(read(destination))
-  )
+let _prepend = default_prepend
+export async function default_prepend(patch, destination) {
+  return await write(patch + '\n' + await(read(destination)), destination)
 }
+
+export const prepend = _prepend
