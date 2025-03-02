@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 2em; }
+      pre { background: #f4f4f4; padding: 1em; overflow: auto; }
+      code { background: #f4f4f4; padding: 0.2em 0.4em; }
+      blockquote { border-left: 4px solid #ddd; margin: 1em 0; padding-left: 1em; color: #555; }
+      img { max-width: 100%; }
+      a { color: #4183c4; text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <h1>{{title}}</h1>
+    
+    {{#if toc}}
+    <nav>
+      <h2>Table of Contents</h2>
+      <ul>
+        {{#each toc}}
+          <li><a href="#{{id}}">{{text}}</a></li>
+        {{/each}}
+      </ul>
+    </nav>
+    {{/if}}
+
+    <article>
+      {{{markdown content}}}
+    </article>
+
+    <footer>
+      <p>Last updated: {{lastUpdated}}</p>
+    </footer>
+  </body>
+</html>

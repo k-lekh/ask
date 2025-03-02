@@ -58,12 +58,11 @@ async function default_ask(_task, payload = '', { model = default_model } = {}) 
   }
 
   const task_with_payload = payload ? task + '\n' + String(payload) : task
-  console.log(typeof task_with_payload, task_with_payload)
+  console.log(task_with_payload)
   // task_with_payload = task_with_payload.trim()
   
   const started = Date.now()
-  const id = await hash(task_with_payload);
-  const log_id = `${id} Ask`;
+  const id = await hash(task_with_payload); 
 
   const cache_path = `cache/ask/${id}.${model}`  
   const cache_text = await cache(cache_path)
@@ -91,9 +90,10 @@ ${task_with_payload}
   await write(text_result, cache_path)
 
   const { prompt_tokens, completion_tokens, total_tokens, completion_tokens_details: { reasoning_tokens } } = completion?.usage
-  const stats = Object.entries({ prompt_tokens, completion_tokens, total_tokens, reasoning_tokens }).map(entry => entry.join('=')).join(', ')
-  console.log(`Done in ${Date.now() - started} ms`)
-  console.log(chalk.gray(stats))
+  const stats = Object.entries({ total_tokens, reasoning_tokens, prompt_tokens, completion_tokens }).map(entry => entry.join('=')).join(', ')
+  console.log(chalk.magenta(`Ask done in ${Date.now() - started} ms`))
+  console.log(chalk.magenta(stats))
+  await write(stats, `logs/ask.${id}.usage`)
 
   return text_result
 }

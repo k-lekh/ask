@@ -33,9 +33,13 @@ process.on('SIGINT', () => exit('SIGINT'))
 process.on('SIGTERM', () => exit('SIGTERM'))
 
 const [first_path, first_payload] = process.argv.slice(2) || []
-await run_routine(first_path || `
+const result = first_path ? await run_routine(first_path, first_payload) : await ask(`
+  // transpiled server routine is just javascript
   // display default reply
   return ask('');
+`)
 
-  // transpiled routine is just javascript
-`, first_payload);
+if (first_path) {
+  io.write(result);
+  io.close();
+}

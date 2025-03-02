@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header>
+      <h1>{{header}}</h1>
+      {{#if subtitle}}
+        <h2>{{subtitle}}</h2>
+      {{/if}}
+      {{#if description}}
+        <p>{{description}}</p>
+      {{/if}}
+    </header>
+
+    <nav>
+      <ul>
+        {{#each toc}}
+          <li><a href="#{{id}}">{{title}}</a></li>
+        {{/each}}
+      </ul>
+    </nav>
+
+    <main>
+      {{#each sections}}
+        <section id="{{id}}">
+          <h2>{{title}}</h2>
+          <!-- The content below supports common Markdown elements such as:
+               Headings (#), Bold (**text**), Italics (*text*), Links ([text](url)), 
+               Code (`code`), Blockquotes (> quote) etc.
+               Use triple curly braces to render pre-processed Markdown into HTML. -->
+          {{{content}}}
+        </section>
+      {{/each}}
+    </main>
+
+    <footer>
+      <p>{{footer}}</p>
+    </footer>
+  </body>
+</html>

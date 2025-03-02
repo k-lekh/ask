@@ -1,0 +1,24 @@
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #333333;
+    --primary: #007BFF;
+    --accent: #FFC107;
+  }
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: sans-serif;
+    margin: 20px;
+  }
+  h1, h2, h3 {
+    color: var(--primary);
+  }
+  a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+</style>

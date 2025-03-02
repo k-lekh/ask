@@ -66,7 +66,7 @@ export const transpile = async (ask_text, { model = 'o3-mini', cache_file } = {}
 
   const clean_js = await clean(js)
   await cache(clean_js, cache_path)
-  await log(chalk.green(`Transpiled`), id);
-  console.log(chalk.grey(clean_js));
+  await log(chalk.bgGreen(`Transpiled`), id);
+  console.log(chalk.green(clean_js));
   return clean_js
 }
