@@ -17,13 +17,13 @@ let last_result = ''
 let last_run
 async function job(payload) {
   last_run = Date.now()
-  console.log(chalk.bgCyan(`Run manager with payload:\n${payload}`))
+  console.log(chalk.bgCyan(`Run manager with payload:\n${payload ?? last_result}`))
 
   const result = await manager(payload ?? last_result)
-  const done_in = Date.now() - last_run
-  const next_run = Math.max(0, check_interval - done_in)
+  const duration = Date.now() - last_run
+  const next_run = Math.max(0, check_interval - duration)
   console.log(chalk.cyan(result))
-  console.log(chalk.bgCyan(`Done in ${done_in} ms, next run in ${next_run} ms`))
+  console.log(chalk.bgCyan(`Done in ${duration} ms, next run in ${next_run} ms`))
   
   timeout = setTimeout(async () => {
     last_result = await job(last_result)
@@ -32,7 +32,7 @@ async function job(payload) {
 
 async function exit(code) {
   clearTimeout(timeout)
-  console.log(chalk.bgRed(`${job_id} received ${code}`))
+  console.log('\n', chalk.bgRed(`${job_id} received ${code}`))
   io.close()
   process.exit(0)
 }

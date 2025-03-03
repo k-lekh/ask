@@ -1,0 +1,13 @@
+
+await write(`
+
+  const state = await read('inbox/self_mutation.state.text')
+  const next_state = state + '-'
+  await write(next_state, 'inbox/self_mutation.state.text')
+  return next_state
+
+`, 'inbox/self_mutation.ask.js')
+
+console.log(`Routine self evolved for the next run.`)
+
+return `inbox/self_mutation.ask.js`

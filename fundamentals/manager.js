@@ -31,7 +31,7 @@ async function default_manager(payload) {
   inbox.split('\n').forEach(async routine_file => {
     console.log(chalk.cyan(`${run_id} ${iteration} Manager runs routine from ${routine_file} with payload ${payload}`))
     const reply = await routine(routine_file)
-    write(reply, `${routine_file}.${run_id}.${iteration}.reply`)
+    console.log(`Reply ${reply}`)
   })
 
   console.log(chalk.cyan(`${run_id} ${iteration} Manager done`))

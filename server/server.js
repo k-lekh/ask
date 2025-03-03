@@ -44,11 +44,11 @@ body    ${payload}
     const artifact = await read(source)
     const routine_file = source.split('.ask.')[0] + '.ask'
     const routine_text = await read(routine_file)
-    const inbox_file = `inbox/${routine_file.replaceAll('\/', '|')}.js`
+    const inbox_file = `inbox/${routine_file.replaceAll('\/', '\/')}.js`
     await write(`
       // Who added: server
       // Why: clien requested cached artifact produced by this routine
-      await routine('${routine_file}')
+      await routine('${routine_file}.js')
     `, inbox_file)
     console.log(chalk.bgWhite(chalk.black(`Added to inbox ${inbox_file}`)))
 
