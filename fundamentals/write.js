@@ -15,13 +15,7 @@ export async function write(text, destination) {
   }
   try {
     const file_path = path.resolve(destination);
-    if (fs.existsSync(file_path)) {
-      const ext = '.' + file_path.split('.').pop().trim();
-      if (overwrite !== true) {
-        console.error(chalk.bgRed(`Declined to overwrite ${file_path}`));
-      }
-    }
-    await fsp.writeFile(file_path , text);
+    await fsp.writeFile(file_path , text, { flag: 'w' });
     console.log(chalk.gray(`write ${file_path}`));
     return text
   } catch(error) {

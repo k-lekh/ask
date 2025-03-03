@@ -45,11 +45,16 @@ async function default_ask(_task, payload = '', { model = default_model } = {}) 
   const task = _task?.trim?.() || '' // todo use in clean
   // TODO: zero point, all requests starts here and then routed to other fundamentals
 
-  if (task === '') {
-    if (payload) {
-      return payload
-    }
-    return default_reply
+  if (!task) {
+    return ask(`
+      Generate a prompt for OpenAI model to make it do its best to perform the following task with the following payload.
+
+      [payload]
+      ${payload}
+      [/payload]
+
+      [${_task}]
+    `)
   }
 
   if (typeof task === 'function') {
@@ -57,9 +62,8 @@ async function default_ask(_task, payload = '', { model = default_model } = {}) 
     return ''
   }
 
-  const task_with_payload = payload ? task + '\n' + String(payload) : task
+  const task_with_payload = (payload ? task + '\n' + String(payload) : task).trim()
   console.log(task_with_payload)
-  // task_with_payload = task_with_payload.trim()
   
   const started = Date.now()
   const id = await hash(task_with_payload); 

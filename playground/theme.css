@@ -1,35 +1,29 @@
 :root {
-  /* Colors */
-  --color-primary: #007bff;
-  --color-secondary: #6c757d;
-  --color-success: #28a745;
-  --color-info: #17a2b8;
-  --color-warning: #ffc107;
-  --color-danger: #dc3545;
-  --color-light: #f8f9fa;
-  --color-dark: #343a40;
-  --color-accent: #03a7dd;
-  --color-text: #212529;
-  --color-muted: #6c757d;
-  --color-background: #fff;
+  /* Color Palette */
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --info-color: #17a2b8;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --light-color: #f8f9fa;
+  --dark-color: #343a40;
+
+  /* Custom brand and sections */
+  --jumbotron-bg: #03a7dd;
+  --footer-bg: #dbdbdb;
+  --footer-text: #99979c;
+  --toc-color: #03a7dd;
+
+  /* Text & Code */
+  --text-body: #212529;
+  --code-color: #212529;
+  --blockquote-border: #ccc;
+
+  /* Form Elements */
+  --input-border-color: #ccc;
 
   /* Typography */
-  --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-size-base: 1rem;
-  --font-weight-normal: 400;
-  --font-weight-bold: 700;
-  --line-height-base: 1.5;
-  --heading-font-weight: 500;
-
-  /* Spacing */
-  --spacing-unit: 1rem;
-
-  /* Borders */
-  --border-width: 1px;
-  --border-radius: .25rem;
-  --border-color: #dee2e6;
-
-  /* Components */
-  --jumbotron-bg: #03a7dd;
-  --jumbotron-text: #fff;
+  --font-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }

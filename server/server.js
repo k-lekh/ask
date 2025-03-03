@@ -10,6 +10,7 @@ app.use(cors())
 import '../console/colors.js'
 import { ask } from '../fundamentals/ask.js'
 import { read } from '../fundamentals/read.js'
+import { write } from '../fundamentals/write.js'
 import { routine } from '../fundamentals/routine.js'
 import { transpile } from '../fundamentals/transpile.js'
 const public_methods = {
@@ -39,25 +40,42 @@ body    ${payload}
     return response.send(await routine(source, payload))
   }
 
-  if (source.endsWith('.ask.js')) {
-    console.log(chalk.cyan(`Run server routine (transpiled) ${source}`))
-    console.log(chalk.gray(await read(source)))
-    return response.send(await routine(source, payload, { transpiled: true }))
+  if (source.indexOf('.ask.') !== -1) {
+    const artifact = await read(source)
+    const routine_file = source.split('.ask.')[0] + '.ask'
+    const routine_text = await read(routine_file)
+    const inbox_file = `inbox/${routine_file.replaceAll('\/', '|')}.js`
+    await write(`
+      // Who added: server
+      // Why: clien requested cached artifact produced by this routine
+      await routine('${routine_file}')
+    `, inbox_file)
+    console.log(chalk.bgWhite(chalk.black(`Added to inbox ${inbox_file}`)))
+
+    if (artifact) {
+      console.log(chalk.yellow('Reply artifact'))
+      return response.send(artifact)
+    }
+
+    // return routine text so may be client may run it faster itself
+    console.log(chalk.yellow('Reply with original routine text'))
+    return response.send(routine_text)
   }
 
   const content = await read(source)
   if (content) {
-    console.log(chalk.cyan('Reply with content'))
+    console.log(chalk.yellow('Reply with content'))
     console.log(content)
-    response.send(content)
+    return response.send(content)
   }
 
-  console.log(chalk.red(source, 'Nothing to do'))
-  return response.send(source + ' Nothing to do')
+  const reply = `Nothing to do with ${source}, planned to deal with it.`
+  console.log(chalk.red(reply))
+  return response.send(reply)
 })
 
 app.get('/', async (request, response) => {
-  response.send(await ask(''))
+  return response.send(await ask(''))
 })
 
 const port = process.env.ASK_PORT

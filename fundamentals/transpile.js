@@ -12,6 +12,9 @@ import { log } from './log.js'
  * Then instant async call of this function retreives a result of executing instructions described in the original payload in Ask-language.
  */
 export const transpile = async (ask_text, { model = 'o3-mini', cache_file } = {}) => {
+  // TODO
+  return ask_text;;;;;
+  
   if (!ask_text) {
     return ''
   }

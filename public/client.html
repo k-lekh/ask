@@ -10,7 +10,6 @@
       }
       ask {
         text-shadow: 0 0 2px #ddbaff;
-        height: 100%;
         display: flex;
         white-space: pre-wrap;
         font-family: monospace;
@@ -38,38 +37,123 @@
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
       }
+
+      iframe {
+        padding: 0;
+        margin: 10px;
+        overflow: hidden;
+        border-radius: 10px;
+        border: 1px dashed #ca20bc;
+      }
     </style>
-    <ask>
-      body_html = task(read('tasks/widget_body.ask'))
+    <ask client>
+      
+        // Another reason to call them 'fundamentals' is that they are so easy to implement with nativa language, so there is no reason to import them. just write or copy paste. As a reward, you will be allowed to tweak a bit each copy for certain needs, for logs usually.
+        const data = read()
+        const parser = new DOMParser();
 
-      let inner = body_html || ''
-      if (inner.startsWith('<body>')) {
-        inner = inner.slice(6)
-      }
-      if (inner.endsWith('</body>')) {
-        inner = inner.slice(0, inner.length - 7)
-      }
-
-      return inner
+        // Parse the string into a document
+        const doc = parser.parseFromString(htmlString, "text/html");
+      
     </ask>
+    <iframe src="http://localhost:9999/playground/theme.ask.html">loading...</iframe>
     <script>
-      const ask_element = document.getElementsByTagName('ask')?.[0];
-      ask_element?.addEventListener('click', async (event) => {
-        const task_text = ask_element.textContent?.trim();
-        if (task_text) {
-          console.log('Run <ask> node task', task_text);
-          const result = await fetch('http://localhost:9000/task', {
-            method: 'POST',
-            body: task_text,
-          }).then(r => r.text());
-          console.log('>> result', { result });
-          if (result) {
-            document.body.innerHTML = result;
+      async function read(source = '') {
+        return await fetch(source).then(r => r.text())
+      }
+
+      async function routine(source, payload) {
+        return await fetch(source, {
+          method: 'POST',
+          body: payload
+        }).then(r => r.text())
+      }
+
+      async function client_routine(source, payload) {
+        const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor
+        const async_func = new AsyncFunction('render', 'read', 'routine', 'trim', source)
+        const func_result = await async_func(render, read, routine, trim, payload)
+        console.info(func_result)
+      }
+
+      async function trim(source = '') {
+        return source.trim()
+      }
+
+      // client side manager used for managing job where i need to be present
+      // logged in instagram and bank website, etc
+
+      // server side manager used for background tasks
+      // server prepares replies for client when client is not active
+      // if server is not loaded, it spends some money on improving itself
+
+      // packed server + client + cache = standalone self evolving completely personalised app
+      // it is browser based, so it can have access to all the available to a human resources
+      // like private pages of people in intagram who are open for friends only,
+      // and you are friend, but only in this browser, and you don't care that much
+      // so you will fuck up with codes and emails and sms and forgot password omg fuck it
+      // i logged in instagram, ok? just open this page for me and get what you need
+      // REST API is dead. All we need is text and questions in natural language
+
+      const consumers = new Set()
+      let render_last_run
+      async function render() {
+        render_last_run = Date.now()
+        document.querySelectorAll(
+          'html,img,css,js,text'.split(',').map(ext => `[src$=".ask.${ext}"]`).join(',')
+        )?.forEach(c => consumers.add(c))
+        
+        const queue = new Set(consumers)
+        console.log('Ask consumers to render', consumers.toString())
+        consumers.forEach(node => {
+          const src = node.getAttribute('src').split('?')[0]
+          node.setAttribute('src', `${src}?${render_last_run}`)
+          queue.delete(node)
+        })
+
+        console.log(`Done in ${Date.now() - render_last_run} ms\nRemainng queue ${queue.toString()}`)
+      }
+
+      const inbox = []
+      async function manager() {  
+        const top = inbox.pop() || ''
+        if (top) {
+          const new_routine = await client_routine(top)
+          if (new_routine) {
+            // it's bit urgent, innit?
+            inbox.push(new_routine)
+            return new_routine
           }
-        } else {
-          console.log('No task in the <ask>');
         }
-      });
+        return ''
+      }
+
+      const pause = 4200
+      let timeout
+      let first_run
+      let last_run
+      let fps
+      let cycles = 0
+      async function run_manager() {
+        cycles = cycles + 1
+        first_run = first_run ?? Date.now()
+        last_run = Date.now()
+        const last_routine_result = await manager()
+        console.log('Last routine result from manager', last_routine_result);
+
+        const render_result = await render()
+        console.log('Render result', render_result);
+        
+        const now = Date.now()
+        const duration = now - last_run
+        const next_run = Math.max(0, pause - duration)
+        const fps = cycles / duration / 1000;
+        const fpm = fps * 60;
+        console.log('Done', { fpm, fps, cycles, duration, next_run })
+        
+        timeout = setTimeout(run_manager, next_run)
+      }
+      run_manager()
     </script>
   </body>
 </html>

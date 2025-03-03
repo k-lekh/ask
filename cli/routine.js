@@ -1,7 +1,6 @@
 import readline from 'readline'
 import chalk from 'chalk'
 import { routine } from '../fundamentals/routine.js'
-import { read } from '../fundamentals/read.js'
 
 const run_id = Date.now()
 

@@ -5,6 +5,7 @@
   "main": "index.ask",
   "type": "module",
   "scripts": {
+    "manager": "node ./cli/manager.js 'debug mode'",
     "release": "npm version patch && npm publish --access=public",
     "deploy": "gh-pages -d public",
     "ask": "node ./cli/ask.js",

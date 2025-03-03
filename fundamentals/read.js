@@ -3,19 +3,19 @@ import fg from 'fast-glob'
 import chalk from 'chalk'
 import { promises as fsp } from 'fs'
 
-export async function read(resource = '') {
-  if (resource.toLowerCase().startsWith('https://')) {
-    return node_fetch(resource).then(r => r.text());
+export async function read(source = '') {
+  if (source.toLowerCase().startsWith('https://')) {
+    return node_fetch(source).then(r => r.text());
   }
 
-  if (resource.toLocaleLowerCase() === 'date') {
+  if (source.toLocaleLowerCase() === 'date') {
     return Date.now().toString();
   }
 
-  const files = await fg(resource); 
+  const files = await fg(source); 
   if (files.length === 0) {
-    console.log(chalk.gray('read nothing', resource))
-  } else if (files.length > 1) {
+    console.log(chalk.gray('read nothing', source))
+  } else if (files.length > 1 || source.includes('*')) {
     return files.join('\n')
   }
 

@@ -244,3 +244,7 @@ but you are responsible for the result. that's the deal.
 so, you IMPORT ONLY FUNDAMENTALS, mine or your, and write your script, and you are free to use any common name, which is not reserved by javascript engine, you don't even care about browser "надстройки над движком", hacky features.
 your routines are executed on server, in sandbox, with limited global functions. and you control what these functions are doing.
 you may redefine them before ask() calls, (but then you have to import them or not?).
+
+# Когда не надо ничего импортировать
+Код становится самодостаточным, и не избыточным настолько, что с ним можно работать как просто с текстом.
+Переставлять фрагменты местами, чиать параллельно, комбинировать и тд.
