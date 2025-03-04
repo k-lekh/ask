@@ -50,13 +50,13 @@ async function routine_default(source, payload, { transpiled = false } = {}) {
   if (!js_code) {
     js_code = transpiled ? routine_with_payload : await transpile(routine_with_payload)
   }
-  const async_func = new AsyncFunction('cheerio', 'ask', 'read', 'write', 'fetch', 'find', 'transpile', 'hash', 'log', js_code)
+  const async_func = new AsyncFunction('cheerio', 'routine', 'ask', 'read', 'write', 'fetch', 'find', 'transpile', 'hash', 'log', js_code)
   console.log(chalk.bgGreen('Created async function'))
   console.log(chalk.green(async_func.toString()))
   
   let async_func_result = ''
   try {
-    async_func_result = await clean(await async_func(cheerio, ask, read, write, node_fetch, find, transpile, hash, log))
+    async_func_result = await clean(await async_func(cheerio, _routine, ask, read, write, node_fetch, find, transpile, hash, log))
     console.log(chalk.green(async_func_result))
   } catch (e) {
     async_func_result = e.message || String(e)

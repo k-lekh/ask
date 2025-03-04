@@ -23,10 +23,10 @@ app.all('*', async ({ path, body, method }, response) => {
   const source = path.substring(1).replaceAll('%20', ' ')
   const payload = String(body)
   console.log(chalk.gray(`
-path    ${path}
-source  ${source}
-method  ${method}
-body    ${payload}
+    path    ${path}
+    source  ${source}
+    method  ${method}
+    body    ${payload}
   `.trim()))
 
   if (public_methods[source]) {
@@ -45,10 +45,11 @@ body    ${payload}
     const routine_file = source.split('.ask.')[0] + '.ask'
     const routine_text = await read(routine_file)
     const inbox_file = `inbox/${routine_file.replaceAll('\/', '\/')}.js`
+
     await write(`
       // Who added: server
       // Why: clien requested cached artifact produced by this routine
-      await routine('${routine_file}.js')
+      return await routine('${routine_file}.js')
     `, inbox_file)
     console.log(chalk.bgWhite(chalk.black(`Added to inbox ${inbox_file}`)))
 
@@ -69,6 +70,14 @@ body    ${payload}
     return response.send(content)
   }
 
+  // await write(`/**
+  //   Who added: server
+  //   Why: clien requested unknown source 
+  //   [requested_source]
+  //   ${source}
+  //   [/requested_source]
+  // */`, `inbox/${source}.ask.js`)
+  // console.log(chalk.bgWhite(chalk.black(`Added to inbox ${inbox_file}`)))
   const reply = `Nothing to do with ${source}, planned to deal with it.`
   console.log(chalk.red(reply))
   return response.send(reply)

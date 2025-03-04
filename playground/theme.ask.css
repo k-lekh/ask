@@ -1,0 +1,46 @@
+:root {
+  /* Typography */
+  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-size-base: 1rem;
+  --line-height-base: 1.5;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+
+  /* Colors (Bootstrap defaults) */
+  --color-primary: #007bff;
+  --color-secondary: #6c757d;
+  --color-success: #28a745;
+  --color-info: #17a2b8;
+  --color-warning: #ffc107;
+  --color-danger: #dc3545;
+  --color-light: #f8f9fa;
+  --color-dark: #343a40;
+
+  /* Sizing & Spacing */
+  --border-radius: 0.25rem;
+
+  /* Jumbotron (custom override) */
+  --jumbotron-bg: #03a7dd;
+  --jumbotron-text: #fff;
+
+  /* Navigation TOC (custom) */
+  --toc-link-hover-color: #03a7dd;
+  --toc-link-active-border: 2px solid #03a7dd;
+}
+
+/* Integration example for TOC */
+nav[data-toggle="toc"] .nav > li > a:hover,
+nav[data-toggle="toc"] .nav-link.active,
+nav[data-toggle="toc"] .nav-link.active:focus,
+nav[data-toggle="toc"] .nav-link.active:hover,
+nav[data-toggle="toc"] .nav > li > a:focus {
+  color: var(--toc-link-hover-color);
+  border-left: 1px solid var(--toc-link-hover-color);
+}
+
+nav[data-toggle="toc"] .nav > .active > a,
+nav[data-toggle="toc"] .nav > .active:hover > a,
+nav[data-toggle="toc"] .nav > .active:focus > a {
+  color: var(--toc-link-hover-color);
+  border-left: var(--toc-link-active-border);
+}

@@ -147,8 +147,8 @@
         const now = Date.now()
         const duration = now - last_run
         const next_run = Math.max(0, pause - duration)
-        const fps = cycles / duration / 1000;
-        const fpm = fps * 60;
+        const fps = NaN
+        const fpm = NaN
         console.log('Done', { fpm, fps, cycles, duration, next_run })
         
         timeout = setTimeout(run_manager, next_run)

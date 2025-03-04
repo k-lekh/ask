@@ -63,7 +63,6 @@ async function default_ask(_task, payload = '', { model = default_model } = {}) 
   }
 
   const task_with_payload = (payload ? task + '\n' + String(payload) : task).trim()
-  console.log(task_with_payload)
   
   const started = Date.now()
   const id = await hash(task_with_payload); 

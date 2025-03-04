@@ -1,7 +1,5 @@
 import chalk from 'chalk'
-import { ask } from './ask.js'
 import { read } from './read.js'
-import { write } from './write.js'
 import { routine } from './routine.js'
 
 /**
@@ -21,20 +19,18 @@ import { routine } from './routine.js'
  * **Ask discourages any form of harm.**
  */
 
-const run_id = Date.now()
-let iteration = 0
 let _manager = default_manager
 async function default_manager(payload) {
-  const inbox = await read(`inbox/**.ask.js`)
+  const inbox = await read(`inbox/**/*.ask.js`)
   console.log(chalk.green(inbox))
 
   inbox.split('\n').forEach(async routine_file => {
-    console.log(chalk.cyan(`${run_id} ${iteration} Manager runs routine from ${routine_file} with payload ${payload}`))
+    console.log(chalk.cyan(`Manager runs routine from ${routine_file} with payload ${payload}`))
     const reply = await routine(routine_file)
     console.log(`Reply ${reply}`)
   })
 
-  console.log(chalk.cyan(`${run_id} ${iteration} Manager done`))
+  console.log(chalk.cyan(`Manager done`))
 }
 
 export const manager = _manager

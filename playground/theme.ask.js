@@ -22,7 +22,7 @@ const css_url = await read(`${base}.css_url`) || await ask(`
   # html
   ${q('head')}
 `)
-await write(css_url, `${base}.css_url`)
+await write(css_url, `${base}.ask.css_url`)
 
 /**
  * In-place cache
@@ -45,4 +45,29 @@ const theme = await read(`${base}.theme`) || await ask(`
     ${await read(`https://www.markdownguide.org${css_url}`)}
     [/parse_css]
 `)
-await write(theme, `${base}.css`)
+await write(theme, `${base}.ask.css`)
+
+/**
+ * So I just edit my knowledge base here and there
+ * And Ask Manager rebuilds my artifacts in background
+ */
+const html = await read(`${base}.html`) || await ask(`
+  Display the provided design system in a small widget.
+  Apply design system to the generated html.
+  Add new examples.
+  Make responsive compact page.
+  Reply with valid HTML page.
+
+  [design_system]
+  ${theme}
+  [/design_system]
+`).then(x => ask(`
+  Optimise provided html page for small widget size.
+  Max size is 300px width, 150px height.
+  Widget should be smaller than max size, and be responsive to always fill all page with no scroll.
+  
+  [HTML]
+  ${x}
+  [/HTML]
+`))
+await write(html, `${base}.ask.html`)
