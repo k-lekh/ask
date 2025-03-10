@@ -22,19 +22,24 @@ const public_methods = {
 
 app.all('*', async ({ path, body, method }, response) => {
   const source = path.substring(1).replaceAll('%20', ' ')
-  const payload = String(body)
+  const payload = typeof body === 'object' ? JSON.stringify(body, null, 2) : String(body)
   console.log(chalk.gray(`
 Web server received a request:
 path    ${path}
 source  ${source}
 method  ${method}
-body    ${typeof payload === 'object' ? JSON.stringify(payload, null, 2) : String(payload)}
+payload ${payload}
   `))
 
   // for endpoints like /routine, /ask, /write, etc.
-  if (public_methods[source]) {
+  const public_method = public_methods[source]
+  if (typeof public_method === 'function') {
     console.log(chalk.cyan(`Run public method '${source}'`))
-    return response.send(await public_methods[source](payload))
+    console.log(payload)
+    const public_method_result = await public_method(payload)
+    console.log('>> public_method_result')
+    console.log(public_method_result)
+    return response.send(public_method_result)
   }
 
   // run routine from file, which usually produces another file artifacts
@@ -47,7 +52,7 @@ body    ${typeof payload === 'object' ? JSON.stringify(payload, null, 2) : Strin
   // reply with content file, if it exists
   const source_content = await read(source)
   if (source_content) {
-    console.log(chalk.cyan(`Respond with file content '${source}'`))
+    console.log(chalk.cyan(`Respond with file content ${source}`))
     console.log(chalk.gray(source_content))
     return response.send(source_content)
   }

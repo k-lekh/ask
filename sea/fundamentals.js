@@ -7,9 +7,10 @@ function info(...args) {
 }
 
 const fundamentals = {
+  ask,
   info,
   log,
-  read: network,
+  read,
   write,
   routine,
   trim,
@@ -28,6 +29,10 @@ async function selector(source, query) {
   return doc.querySelectorAll(query)
 }
 
+async function ask(text) {
+  // return network(`/ask`, text)
+}
+
 async function write(source, payload) {
   if (source.startsWith('https://')) {
     return network(source, payload)
@@ -36,6 +41,10 @@ async function write(source, payload) {
   if (source.startsWith('inbox/')) {
     inbox.push({ source, payload })
   }
+}
+
+async function read(source, payload) {
+  return network(`/${source}`, payload)
 }
 
 async function network(source, payload) {

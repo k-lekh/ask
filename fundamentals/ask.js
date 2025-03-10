@@ -49,6 +49,11 @@ const default_reply = `
 
 let _ask = default_ask
 async function default_ask(_task, payload = '', { model = default_model } = {}) {
+  if (typeof _task === 'function') {
+    _ask = _task
+    return ''
+  }
+  
   const task = _task?.trim?.() || '' // todo use in clean
   // TODO: zero point, all requests starts here and then routed to other fundamentals
 
@@ -62,11 +67,6 @@ async function default_ask(_task, payload = '', { model = default_model } = {}) 
 
       [${_task}]
     `)
-  }
-
-  if (typeof task === 'function') {
-    _ask = task
-    return ''
   }
 
   const task_with_payload = (payload ? task + '\n' + String(payload) : task).trim()

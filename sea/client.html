@@ -44,9 +44,23 @@
       }
     </style>
     <ask id="concept">
-      const concept = await read('http://localhost:9999/sea/Concept.md')
-      log('>> concept', concept)
-      info('>> concept', concept)
+      const [concept, fundamentals_content] = await Promise.all([
+        read('./sea/Concept.md'),
+        ask(`
+          # Task
+          Read the provided javascript_source and answer the following questions regarding the source code:
+          1. What is fundamental?
+          2. What is not fundamental?
+          3. List of all implemented fundamentals with short descrption of its features.
+
+          [javascript_source]
+          ${await read('sea/fundamentals.js')}
+          [/javascript_source]
+        `)
+      ])
+
+      log('concept', concept)
+      log('fundamentals_content', fundamentals_content)
     </ask>
     <script src="fundamentals.js"></script>
     <script src="client.js"></script>
