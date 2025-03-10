@@ -43,8 +43,9 @@
         text-shadow: none;
       }
     </style>
-    <ask>
-      console.log('122')
+    <ask id="concept">
+      const concept = await read('http://localhost:9999/sea/Concept.md')
+      console.log('>> concept', concept)
     </ask>
     <script src="fundamentals.js"></script>
     <script src="client.js"></script>
