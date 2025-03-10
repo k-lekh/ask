@@ -27,7 +27,7 @@ export async function write(text, destination) {
     const file_path = path.resolve(destination);
     await fsp.writeFile(file_path , text, { flag: 'w' });
     console.log(chalk.gray(`write ${file_path}`));
-    return text
+    return destination
   } catch(error) {
     return ''
   }

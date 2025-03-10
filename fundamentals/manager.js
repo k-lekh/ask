@@ -21,13 +21,15 @@ import { routine } from './routine.js'
 
 let _manager = default_manager
 async function default_manager(payload) {
-  const inbox = await read(`inbox/**/*.ask.js`)
+  const inbox = 'inbox/sea/widget.html.ask.js'
+  // const inbox = await read(`inbox/**/*.ask.js`)
   console.log(chalk.green(inbox))
 
   inbox.split('\n').forEach(async routine_file => {
     console.log(chalk.cyan(`Manager runs routine from ${routine_file} with payload ${payload}`))
     const reply = await routine(routine_file)
-    console.log(`Reply ${reply}`)
+    console.log(`Reply from ${routine_file}`)
+    console.log(reply)
   })
 
   console.log(chalk.cyan(`Manager done`))

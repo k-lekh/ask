@@ -8,6 +8,13 @@ import '../console/colors.js'
 dotenv.config()
 const default_model = 'o3-mini-2025-01-31'
 
+const getModel = (guess) =>{
+  return {
+    default_model,
+    'o3': 'o3-mini-2025-01-31',
+  }[guess] ?? guess
+}
+
 import OpenAI from "openai"
 const rules = `
   Be concise. Do not repeat question. Do not repeat input data.
@@ -46,7 +53,7 @@ async function default_ask(_task, payload = '', { model = default_model } = {}) 
   // TODO: zero point, all requests starts here and then routed to other fundamentals
 
   if (!task) {
-    return ask(`
+    return await ask(`
       Generate a prompt for OpenAI model to make it do its best to perform the following task with the following payload.
 
       [payload]
@@ -67,7 +74,7 @@ async function default_ask(_task, payload = '', { model = default_model } = {}) 
   const started = Date.now()
   const id = await hash(task_with_payload); 
 
-  const cache_path = `cache/ask/${id}.${model}`  
+  const cache_path = `cache/ask/${id}.${getModel(model)}`  
   const cache_text = await cache(cache_path)
   if (cache_text) {
     return cache_text

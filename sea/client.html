@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <style>
+      @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      html, body {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(262deg, rgb(106, 0, 255), rgb(255, 134, 134));
+        background-repeat: no-repeat;
+        background-size: 300% 300%;
+        animation: gradient 20s ease infinite;
+      }
+      ask {
+        box-sizing: border-box;
+        text-shadow: 0 0 2px #ddbaff;
+        display: flex;
+        font-family: monospace;
+        background-image: linear-gradient(135deg, #ff6ec4, #7873f5);
+        background-size: 300% 300%;
+        animation: gradient 15s ease infinite;
+        padding: 0;
+        border: none;
+        white-space: pre-line;
+        padding: 2px 10px 10px;
+      }
+      ask:before {
+        left: 0;
+        top: 0;
+        position: absolute;
+        padding: 1px 0px 0px 3px;
+        font-size: 80%;
+        display: block;
+        content: 'Ask';
+        opacity: 1;
+        color: rgba(0,0,0,0.5);
+        text-shadow: none;
+      }
+    </style>
+    <ask>
+      console.log('122')
+    </ask>
+    <script src="fundamentals.js"></script>
+    <script src="client.js"></script>
+  </body>
+</html>

@@ -111,10 +111,10 @@
           queue.delete(node)
         })
 
-        console.log(`Done in ${Date.now() - render_last_run} ms\nRemainng queue ${queue.toString()}`)
+        console.log(`Render done in ${Date.now() - render_last_run} ms\nRemainng queue ${queue.toString()}`)
       }
 
-      const inbox = []
+      var inbox = []
       async function manager() {  
         const top = inbox.pop() || ''
         if (top) {
