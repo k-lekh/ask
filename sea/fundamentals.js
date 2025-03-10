@@ -1,9 +1,9 @@
-function info(...args) {
-  console.log(`'%c${args.join('\n')}`, 'background-color: #2d2d2d; color: #00d2ff; text-shadow: 0px 0px 8px rgb(109 31 255);');
+function log(...args) {
+  console.log(`%c${args.join('\n')}`, 'padding: 1px 3px; background-color: #2d2d2d; color: #00d2ff; text-shadow: 0px 0px 8px rgb(109 31 255);');
 }
 
-function log(...args) {
-  console.log(`'%c${args.join('\n')}`, 'background-color: #2d2d2d; color: #eeeeee; text-shadow: 0px 0px 8px rgb(109 31 255);');
+function info(...args) {
+  console.log(`%c${args.join('\n')}`, 'padding: 1px 3px; background-color:rgb(0, 86, 46); color: #eeeeee; text-shadow: 0px 0px 8px rgb(109 31 255);');
 }
 
 const fundamentals = {
@@ -15,6 +15,10 @@ const fundamentals = {
   trim,
   selector,
 }
+Object.entries(fundamentals).forEach(([key, fn]) => {
+  window[key] = fn
+})
+
 console.info(`Fundamentals: ${Object.keys(fundamentals).join(', ')}`)
 
 async function selector(source, query) {
