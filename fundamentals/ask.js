@@ -97,6 +97,7 @@ ${task_with_payload}
       }]
   });
   const text_result = completion?.choices?.map(choice => choice?.message?.content).filter(Boolean).join('\n\n')
+  console.log('>> text_result', text_result)
   await write(text_result, cache_path)
 
   const { prompt_tokens, completion_tokens, total_tokens, completion_tokens_details: { reasoning_tokens } } = completion?.usage

@@ -34,8 +34,7 @@ payload ${payload}
   // for endpoints like /routine, /ask, /write, etc.
   const public_method = public_methods[source]
   if (typeof public_method === 'function') {
-    console.log(chalk.cyan(`Run public method '${source}'`))
-    console.log(payload)
+    console.log(chalk.cyan(`Run public method '${source}'`), public_method)
     const public_method_result = await public_method(payload)
     console.log('>> public_method_result')
     console.log(public_method_result)
@@ -85,10 +84,7 @@ await write('', '${inbox_file}')
 const requested_source = '${source}'
   `)
   const write_result = await write(inbox_text, inbox_file)
-  console.log(chalk.bgRed(chalk.black(`Planned ${write_result}`)))
-  console.log(chalk.gray(inbox_text))
-
-  return response.send(write_result)
+  return response.send(write_result ?? '')
 })
 
 app.get('/', async (request, response) => {

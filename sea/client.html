@@ -44,7 +44,7 @@
       }
     </style>
     <ask id="concept">
-      const [concept, fundamentals_content] = await Promise.all([
+      const [md_concept, fundamentals_content] = await Promise.all([
         read('./sea/Concept.md'),
         ask(`
           # Task
@@ -59,8 +59,20 @@
         `)
       ])
 
-      log('concept', concept)
-      log('fundamentals_content', fundamentals_content)
+      const md_render = await ask(`
+        # Task
+        Convert the following Markdown to the div element with embeded css.
+
+        [markdown]
+        ${md_concept}
+        [/markdown]
+      `)
+
+      const result = `<div>
+        <div>${md_render}</div>
+        <pre>${fundamentals_content}</pre>
+      </div>`
+      document.getElementById('concept').innerHTML = result
     </ask>
     <script src="fundamentals.js"></script>
     <script src="client.js"></script>

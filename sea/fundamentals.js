@@ -30,7 +30,7 @@ async function selector(source, query) {
 }
 
 async function ask(text) {
-  // return network(`/ask`, text)
+  return network(`/ask`, text)
 }
 
 async function write(source, payload) {
