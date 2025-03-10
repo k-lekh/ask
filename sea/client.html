@@ -44,7 +44,7 @@
       }
     </style>
     <ask id="concept">
-      const [md_concept, fundamentals_content] = await Promise.all([
+      const [md_concept, md_fundamentals] = await Promise.all([
         read('./sea/Concept.md'),
         ask(`
           # Task
@@ -53,24 +53,37 @@
           2. What is not fundamental?
           3. List of all implemented fundamentals with short descrption of its features.
 
+          # Output
+          Reply in format of Markdown
+
           [javascript_source]
           ${await read('sea/fundamentals.js')}
           [/javascript_source]
         `)
       ])
 
-      const md_render = await ask(`
-        # Task
-        Convert the following Markdown to the div element with embeded css.
+      const [render_concept, render_fundamentals] = await Promise.all([
+        ask(`
+          # Task
+          Convert the following Markdown to the div element with nested elements and embeded css.
 
-        [markdown]
-        ${md_concept}
-        [/markdown]
-      `)
+          [markdown]
+          ${md_concept}
+          [/markdown]
+        `),
+        ask(`
+          # Task
+          Convert the following Markdown to the div element with nested elements and embeded css.
+
+          [markdown]
+          ${md_fundamentals}
+          [/markdown]
+        `)
+      ])
 
       const result = `<div>
-        <div>${md_render}</div>
-        <pre>${fundamentals_content}</pre>
+        <div>${render_concept}</div>
+        <pre>${render_fundamentals}</pre>
       </div>`
       document.getElementById('concept').innerHTML = result
     </ask>
